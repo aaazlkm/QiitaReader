@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">QiitaApp</string>
+
+    <!--  common dialog  -->
+    <string name="common_dialog_ok">OK</string>
+    <string name="common_dialog_cancel">CANCEL</string>
+    <string name="common_dialog_cancel_jp">キャンセル</string>
+    <string name="common_dialog_select">選択する</string>
+    <string name="common_dialog_retry">再試行</string>
 </resources>
