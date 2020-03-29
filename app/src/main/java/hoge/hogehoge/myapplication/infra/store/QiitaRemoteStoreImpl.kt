@@ -10,6 +10,6 @@ class QiitaRemoteStoreImpl @Inject constructor(
     private val qiitaService: QiitaService
 ) : QiitaRemoteStore {
     override fun fetchArticles(request: GetArticleAPI.Request): Single<List<ArticleInAPI>> {
-        return qiitaService.fetchArticles(request.path, request.queryParameter)
+        return qiitaService.fetchArticles(request.path, request.parameters)
     }
 }

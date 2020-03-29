@@ -11,7 +11,7 @@ interface QiitaRepository {
 
     fun fetchSavedArticles(): Single<List<ArticleInDB>>
 
-    fun upsertArticles(vararg articles: ArticleInDB): Completable
+    fun upsertSavedArticles(vararg articles: ArticleInDB): Completable
 
     fun deleteSavedArticle(article: ArticleInDB): Completable
 }

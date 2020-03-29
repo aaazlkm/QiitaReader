@@ -28,7 +28,7 @@ class QiitaRepositoryImpl @Inject constructor(
         return qiitaLocalStore.fetchArticles()
     }
 
-    override fun upsertArticles(vararg articles: ArticleInDB): Completable {
+    override fun upsertSavedArticles(vararg articles: ArticleInDB): Completable {
         return qiitaLocalStore.upsertArticles(*articles)
     }
 
