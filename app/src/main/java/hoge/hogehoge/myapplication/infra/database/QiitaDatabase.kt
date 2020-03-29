@@ -9,7 +9,8 @@ import hoge.hogehoge.myapplication.infra.database.entity.ArticleInDB
 
 @Database(
     entities = [ArticleInDB::class],
-    version = QiitaDatabase.VERSION
+    version = QiitaDatabase.VERSION,
+    exportSchema = false
 )
 abstract class QiitaDatabase : RoomDatabase() {
     abstract fun articleDao(): ArticleDao
