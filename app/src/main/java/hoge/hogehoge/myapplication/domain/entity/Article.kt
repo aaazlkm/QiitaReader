@@ -12,12 +12,11 @@ sealed class Article {
         override val title: String,
         override val bodyMarkDown: String,
         val commentsCount: Int,
-        val createdAt: String,
+        val createdAt: Date,
         val likesCount: Int,
         val tags: List<Tag.Remote>,
         val url: String,
-        val user: User.Remote,
-        val pageViewsCount: Int
+        val user: User.Remote
     ) : Article()
 
     data class Local(

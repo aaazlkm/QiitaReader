@@ -83,4 +83,8 @@ open class BaseFragment : DaggerFragment() {
             doOnClickCancel
         )
     }
+
+    fun setLocadingView(needShow: Boolean) {
+        baseActivity?.setLoadingView(needShow)
+    }
 }

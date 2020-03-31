@@ -6,7 +6,7 @@ import io.reactivex.Completable
 import io.reactivex.Observable
 
 interface QiitaUseCase {
-    fun fetchArticles(page: String, perPage: String): Observable<Result<List<Article.Remote>>>
+    fun fetchArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>>
 
     fun fetchSavedArticles(): Observable<Result<List<Article.Local>>>
 

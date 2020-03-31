@@ -1,5 +1,6 @@
 package hoge.hogehoge.myapplication.domain.usecase
 
+import hoge.hogehoge.myapplication.common.ex.toDateInISO8601
 import hoge.hogehoge.myapplication.common.ex.toResult
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.entity.Tag
@@ -22,7 +23,7 @@ class QiitaUseCaseImpl @Inject constructor(
 
     //region remote
 
-    override fun fetchArticles(page: String, perPage: String): Observable<Result<List<Article.Remote>>> {
+    override fun fetchArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
         val request = GetArticleAPI.Request(page, perPage)
         return qiitaRepository
             .fetchArticles(request)
@@ -77,12 +78,11 @@ class QiitaUseCaseImpl @Inject constructor(
             val title = it.title ?: return@mapNotNull null
             val bodyMarkDown = it.body ?: return@mapNotNull null
             val commentsCount = it.commentsCount ?: return@mapNotNull null
-            val createdAt = it.createdAt ?: return@mapNotNull null
+            val createdAt = it.createdAt?.toDateInISO8601() ?: return@mapNotNull null
             val likesCount = it.likesCount ?: return@mapNotNull null
             val tags = convertTagsInAPI(it.tags)
             val url = it.url ?: return@mapNotNull null
             val user = it.user?.let { convertUserInAPI(it) } ?: return@mapNotNull null
-            val pageViewsCount = it.pageViewsCount ?: return@mapNotNull null
 
             Article.Remote(
                 articleId,
@@ -93,24 +93,19 @@ class QiitaUseCaseImpl @Inject constructor(
                 likesCount,
                 tags,
                 url,
-                user,
-                pageViewsCount
+                user
             )
         }
     }
 
     private fun convertTagsInAPI(tagsInAPI: List<TagInAPI>): List<Tag.Remote> {
         return tagsInAPI.mapNotNull {
-            val id = it.id ?: return@mapNotNull null
-            val followersCount = it.followersCount ?: return@mapNotNull null
-            val iconUrl = it.iconUrl ?: return@mapNotNull null
-            val itemsCount = it.itemsCount ?: return@mapNotNull null
+            val name = it.name ?: return@mapNotNull null
+            val versions = it.versions ?: listOf()
 
             Tag.Remote(
-                id,
-                followersCount,
-                iconUrl,
-                itemsCount
+                name,
+                versions
             )
         }
     }
