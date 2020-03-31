@@ -6,8 +6,8 @@ import hoge.hogehoge.myapplication.infra.api.template.APIRequest
 
 object GetArticleAPI {
     data class Request(
-        val page: String,
-        val perPage: String
+        val page: Int,
+        val perPage: Int
     ) : APIRequest {
         enum class QueryName(val queryName: String) {
             PAGE("page"),
@@ -19,8 +19,8 @@ object GetArticleAPI {
 
         override val parameters: Map<String, String>
             get() = mapOf(
-                QueryName.PAGE.queryName to page,
-                QueryName.PER_OAGE.queryName to perPage
+                QueryName.PAGE.queryName to page.toString(),
+                QueryName.PER_OAGE.queryName to perPage.toString()
             )
     }
 }

@@ -8,6 +8,7 @@ import hoge.hogehoge.myapplication.di.DatabaseModule
 import hoge.hogehoge.myapplication.di.DomainModule
 import hoge.hogehoge.myapplication.di.InfraModule
 import hoge.hogehoge.myapplication.di.NetworkModule
+import io.reactivex.plugins.RxJavaPlugins
 import timber.log.Timber
 
 class App : DaggerApplication() {
@@ -16,11 +17,21 @@ class App : DaggerApplication() {
         super.onCreate()
 
         setupTimber()
+
+        setRxJavaPluginsErrorHandler()
     }
 
     private fun setupTimber() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        }
+    }
+
+    private fun setRxJavaPluginsErrorHandler() {
+        // disposed後にエラーが呼ばれた場合、このメソッドが呼ばれる
+        // 講読解除後のエラーには関心がないはずなので、ここではログ出力のみにする
+        RxJavaPlugins.setErrorHandler {
+            Timber.d("catch GlobalErrorHandler ${it.message}")
         }
     }
 

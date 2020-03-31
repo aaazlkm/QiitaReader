@@ -5,9 +5,7 @@ package hoge.hogehoge.myapplication.domain.entity
  */
 sealed class Tag {
     data class Remote(
-        val id: String,
-        val followersCount: Int,
-        val iconUrl: String,
-        val itemsCount: Int
+        val name: String?,
+        val versions: List<String>?
     )
 }

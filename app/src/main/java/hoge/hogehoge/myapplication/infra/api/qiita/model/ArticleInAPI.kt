@@ -10,6 +10,5 @@ data class ArticleInAPI(
     val likesCount: Int?,
     val tags: List<TagInAPI>,
     val url: String?,
-    val user: UserInAPI?,
-    val pageViewsCount: Int?
+    val user: UserInAPI?
 )
