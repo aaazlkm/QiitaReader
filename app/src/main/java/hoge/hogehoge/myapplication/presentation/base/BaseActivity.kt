@@ -19,10 +19,14 @@ open class BaseActivity : DaggerAppCompatActivity() {
         findViewById<View>(R.id.loadingView)
     }
 
+    //region Activity override methods
+
     override fun onSupportNavigateUp(): Boolean {
         navigationController.popFragment()
         return super.onSupportNavigateUp()
     }
+
+    //endregion
 
     fun setupActionBar(title: String) {
         val canback = supportFragmentManager.backStackEntryCount > 1
