@@ -1,6 +1,10 @@
 package hoge.hogehoge.myapplication.presentation.base
 
 import android.content.Context
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.OnBackPressedCallback
 import dagger.android.support.DaggerFragment
@@ -32,20 +36,32 @@ open class BaseFragment : DaggerFragment() {
                         activity?.finish()
                     } else {
                         onBackPressed()
+                        navigationController.popFragment()
                     }
                 }
             }
         )
     }
 
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+        setupActionBar()
+        return view
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
 
+        setLocadingView(false)
         hideKeyboard()
         compositeDisposable.clear()
     }
 
     //endregion
+
+    open fun setupActionBar(title: String = "") {
+        baseActivity?.setupActionBar(title)
+    }
 
     /**
      * バックキーが押下された際に呼ばれる

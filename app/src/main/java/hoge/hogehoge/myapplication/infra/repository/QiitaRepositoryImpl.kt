@@ -1,6 +1,7 @@
 package hoge.hogehoge.myapplication.infra.repository
 
 import hoge.hogehoge.myapplication.infra.api.qiita.api.GetArticleAPI
+import hoge.hogehoge.myapplication.infra.api.qiita.api.GetArticlesAPI
 import hoge.hogehoge.myapplication.infra.api.qiita.model.ArticleInAPI
 import hoge.hogehoge.myapplication.infra.database.entity.ArticleInDB
 import hoge.hogehoge.myapplication.infra.store.QiitaLocalStore
@@ -16,7 +17,11 @@ class QiitaRepositoryImpl @Inject constructor(
 
     //region remote
 
-    override fun fetchArticles(request: GetArticleAPI.Request): Single<List<ArticleInAPI>> {
+    override fun fetchArticle(request: GetArticleAPI.Request): Single<ArticleInAPI> {
+        return qiitaRemoteStore.fetchArticle(request)
+    }
+
+    override fun fetchArticles(request: GetArticlesAPI.Request): Single<List<ArticleInAPI>> {
         return qiitaRemoteStore.fetchArticles(request)
     }
 

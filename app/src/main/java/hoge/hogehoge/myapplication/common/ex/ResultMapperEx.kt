@@ -2,6 +2,7 @@ package hoge.hogehoge.myapplication.common.ex
 
 import androidx.annotation.CheckResult
 import hoge.hogehoge.myapplication.domain.result.Result
+import io.reactivex.Completable
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Observable
@@ -40,4 +41,9 @@ fun <T> Maybe<T>.toResult(): Observable<Result<T>> {
 @CheckResult
 fun <T> Maybe<T>.toResult(defaultValue: T): Observable<Result<T>> {
     return toSingle(defaultValue).toResult()
+}
+
+@CheckResult
+fun Completable.toResult(): Observable<Result<Boolean>> {
+    return this.toSingleDefault(true).toResult()
 }

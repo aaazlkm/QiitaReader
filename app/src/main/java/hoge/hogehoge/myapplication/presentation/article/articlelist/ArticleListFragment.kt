@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.myapplication.R
 import hoge.hogehoge.myapplication.databinding.FragmentArticleListBinding
 import hoge.hogehoge.myapplication.di.viewmodel.ViewModelFactory
+import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.result.Result
 import hoge.hogehoge.myapplication.presentation.base.BaseFragment
 import io.reactivex.rxkotlin.addTo
@@ -50,20 +51,42 @@ class ArticleListFragment : BaseFragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        val lastScrollPosition = (binding.articleRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: return
+        val articles = (binding.articleRecyclerView.adapter as? ArticleListAdapter)?.articles ?: return
+        viewModel.saveState(lastScrollPosition, articles)
+    }
+
+    //endregion
+
+    //region override BaseFragment methods
+
+    override fun setupActionBar(title: String) {
+        super.setupActionBar(getString(R.string.fragment_article_list_title))
+    }
+
     //endregion
 
     private fun bindUI() {
         with(binding.swipeRefreshLayout) {
+            setColorSchemeResources(R.color.color_accent)
             setOnRefreshListener {
                 (binding.articleRecyclerView.adapter as? ArticleListAdapter)?.clearArticles()
-                viewModel.resetLastReadPage()
-                viewModel.fetchArticlesIfNotLoading()
+                viewModel.resetState()
+                viewModel.fetchArticles()
             }
         }
 
         with(binding.articleRecyclerView) {
             layoutManager = LinearLayoutManager(this@ArticleListFragment.context)
-            adapter = ArticleListAdapter(context, compositeDisposable)
+            adapter = ArticleListAdapter(context, compositeDisposable).apply {
+                setOnItemClickListener(object : ArticleListAdapter.OnItemClickListener {
+                    override fun onItemClicked(article: Article) {
+                        navigationController.toArticleFragment(article.articleId)
+                    }
+                })
+            }
 
             // 画面下にスクロールした時の処理
             addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -73,7 +96,7 @@ class ArticleListFragment : BaseFragment() {
                     val firstPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() // RecyclerViewの一番上に表示されているアイテムのポジション
                     val visibleChildCount = recyclerView.childCount // RecyclerViewに表示されてるアイテム数
                     if (totalItemCount == firstPosition + visibleChildCount) {
-                        viewModel.fetchArticlesIfNotLoading()
+                        viewModel.fetchArticles()
                     }
                 }
             })
@@ -81,11 +104,11 @@ class ArticleListFragment : BaseFragment() {
     }
 
     private fun bindViewModelEvent() {
-        viewModel.articlesEvent
+        viewModel.eventOfGettingArticles
             .subscribe { result ->
-                Timber.d("articlesEvent :$result")
+                Timber.d("eventOfGettingArticles :$result")
                 if (result is Result.Failure) {
-                    handleArticlesEventError(result.error)
+                    handleErrorArticlesEvent(result.error)
                 }
             }
             .addTo(compositeDisposable)
@@ -101,19 +124,23 @@ class ArticleListFragment : BaseFragment() {
         viewModel.articles
             .subscribe {
                 (binding.articleRecyclerView.adapter as? ArticleListAdapter)?.apply {
-                    insertArticles(it)
+                    insertArticles(it.articles)
+                }
+                when (it) {
+                    is ArticleResult.Cache -> binding.articleRecyclerView.scrollToPosition(it.position)
                 }
             }
             .addTo(compositeDisposable)
     }
 
     private fun fetchData() {
-        viewModel.fetchArticlesIfNotLoading()
+        viewModel.fetchArticlesOrCache()
     }
 
     //region handle error
 
-    private fun handleArticlesEventError(error: Throwable) {
+    private fun handleErrorArticlesEvent(error: Throwable) {
+        Timber.e(error)
         val title = getString(R.string.error_get_articles_title)
         val message = getString(R.string.error_get_articles_message)
 
@@ -121,8 +148,9 @@ class ArticleListFragment : BaseFragment() {
             title,
             message,
             okText = getString(R.string.common_dialog_retry),
+            cancelText = getString(R.string.common_dialog_cancel_jp),
             doOnClickOk = {
-                viewModel.fetchArticlesIfNotLoading()
+                viewModel.fetchArticlesOrCache()
             }
         )
     }

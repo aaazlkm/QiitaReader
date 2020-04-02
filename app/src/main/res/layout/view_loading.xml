@@ -2,16 +2,18 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <hoge.hogehoge.myapplication.presentation.view.ConsumingTouchEventLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/transparent">
+        android:alpha="0.8"
+        android:background="@color/mc_grey_500">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:background="@drawable/background_round"
-            android:backgroundTint="@color/mc_white"
+
+            app:backgroundTint="@color/mc_white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -24,6 +26,7 @@
                 style="?android:attr/progressBarStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:backgroundTint="@color/color_accent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -31,5 +34,5 @@
                 app:layout_constraintVertical_chainStyle="packed" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </hoge.hogehoge.myapplication.presentation.view.ConsumingTouchEventLayout>
 </layout>

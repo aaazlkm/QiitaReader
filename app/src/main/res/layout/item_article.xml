@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/item_article_background">
@@ -42,7 +43,7 @@
             android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginEnd="@dimen/margin_16dp"
             android:text="by aaa"
-            android:textColor="@color/commonTextSub"
+            android:textColor="@color/common_text_sub"
             android:textSize="@dimen/size_text_12sp"
             app:layout_constraintBottom_toTopOf="@+id/createdAtText"
             app:layout_constraintEnd_toEndOf="parent"
@@ -57,7 +58,7 @@
             android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginBottom="@dimen/margin_16dp"
             android:text="at 2020/5/4"
-            android:textColor="@color/commonTextSub"
+            android:textColor="@color/common_text_sub"
             android:textSize="@dimen/size_text_12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -72,7 +73,7 @@
             android:layout_marginStart="@dimen/margin_16dp"
             android:layout_marginEnd="@dimen/margin_16dp"
             android:text="LGTM 20"
-            android:textColor="@color/commonTextSub"
+            android:textColor="@color/common_text_sub"
             android:textSize="@dimen/size_text_12sp"
             app:layout_constraintBottom_toTopOf="@+id/userNameText"
             app:layout_constraintEnd_toEndOf="parent"

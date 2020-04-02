@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="color_primary">@color/mc_grey_50</color>
+    <color name="color_primary_dark">@color/mc_grey_600</color>
+    <color name="color_accent">@color/mc_teal_500</color>
 
     <!--  common text  -->
-    <color name="commonTextMain">@color/mc_grey_800</color>
-    <color name="commonTextSub">@color/mc_grey_500</color>
+    <color name="common_text_main">@color/mc_grey_800</color>
+    <color name="common_text_sub">@color/mc_grey_500</color>
 
     <!--  fragment article list -->
     <color name="image_loading">@color/mc_grey_400</color>

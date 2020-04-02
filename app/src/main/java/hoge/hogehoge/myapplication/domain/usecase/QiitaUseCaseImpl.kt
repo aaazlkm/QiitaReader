@@ -5,14 +5,15 @@ import hoge.hogehoge.myapplication.common.ex.toResult
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.entity.Tag
 import hoge.hogehoge.myapplication.domain.entity.User
+import hoge.hogehoge.myapplication.domain.exception.QiitaException
 import hoge.hogehoge.myapplication.domain.result.Result
 import hoge.hogehoge.myapplication.infra.api.qiita.api.GetArticleAPI
+import hoge.hogehoge.myapplication.infra.api.qiita.api.GetArticlesAPI
 import hoge.hogehoge.myapplication.infra.api.qiita.model.ArticleInAPI
 import hoge.hogehoge.myapplication.infra.api.qiita.model.TagInAPI
 import hoge.hogehoge.myapplication.infra.api.qiita.model.UserInAPI
 import hoge.hogehoge.myapplication.infra.database.entity.ArticleInDB
 import hoge.hogehoge.myapplication.infra.repository.QiitaRepository
-import io.reactivex.Completable
 import io.reactivex.Observable
 import java.util.Date
 import javax.inject.Inject
@@ -23,11 +24,19 @@ class QiitaUseCaseImpl @Inject constructor(
 
     //region remote
 
+    override fun fetchArticle(articleId: String): Observable<Result<Article.Remote>> {
+        val request = GetArticleAPI.Request(articleId)
+        return qiitaRepository
+            .fetchArticle(request)
+            .map { convertArticleInAPI(it) ?: throw QiitaException.FaildToConvertArticleResponse(articleId) }
+            .toResult()
+    }
+
     override fun fetchArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
-        val request = GetArticleAPI.Request(page, perPage)
+        val request = GetArticlesAPI.Request(page, perPage)
         return qiitaRepository
             .fetchArticles(request)
-            .map { convertArticleInAPI(it) }
+            .map { it.mapNotNull { convertArticleInAPI(it) } }
             .toResult()
     }
 
@@ -42,7 +51,7 @@ class QiitaUseCaseImpl @Inject constructor(
             .toResult()
     }
 
-    override fun upsertSavedArticles(vararg articles: Article): Completable {
+    override fun upsertSavedArticles(vararg articles: Article): Observable<Result<Boolean>> {
         val articlesInDB =
             articles.map { article ->
                 ArticleInDB(
@@ -53,11 +62,11 @@ class QiitaUseCaseImpl @Inject constructor(
                 )
             }.toTypedArray()
 
-        return qiitaRepository.upsertSavedArticles(*articlesInDB)
+        return qiitaRepository.upsertSavedArticles(*articlesInDB).toResult()
     }
 
-    override fun deleteSavedArticle(article: Article): Completable {
-        if (article !is Article.Local) return Completable.complete()
+    override fun deleteSavedArticle(article: Article): Observable<Result<Boolean>> {
+        if (article !is Article.Local) return Observable.error(QiitaException.FaildToDeleteArticle)
         val articleInDB = ArticleInDB(
             article.articleId,
             article.title,
@@ -65,37 +74,36 @@ class QiitaUseCaseImpl @Inject constructor(
             article.savedAt.time
         )
 
-        return qiitaRepository.deleteSavedArticle(articleInDB)
+        return qiitaRepository.deleteSavedArticle(articleInDB).toResult()
     }
 
     //endregion
 
     //region convert methods
 
-    private fun convertArticleInAPI(articlesInAPI: List<ArticleInAPI>): List<Article.Remote> {
-        return articlesInAPI.mapNotNull {
-            val articleId = it.id ?: return@mapNotNull null
-            val title = it.title ?: return@mapNotNull null
-            val bodyMarkDown = it.body ?: return@mapNotNull null
-            val commentsCount = it.commentsCount ?: return@mapNotNull null
-            val createdAt = it.createdAt?.toDateInISO8601() ?: return@mapNotNull null
-            val likesCount = it.likesCount ?: return@mapNotNull null
-            val tags = convertTagsInAPI(it.tags)
-            val url = it.url ?: return@mapNotNull null
-            val user = it.user?.let { convertUserInAPI(it) } ?: return@mapNotNull null
+    private fun convertArticleInAPI(articlesInAPI: ArticleInAPI): Article.Remote? {
+        val articleId = articlesInAPI.id ?: return null
+        val title = articlesInAPI.title ?: return null
+        // qiitaで取得するMarkdownの書式が一般的なものと異なるため調整している
+        val bodyMarkDown = articlesInAPI.body?.let { "#+".toRegex().replace(it) { it.value + " " } } ?: return null
+        val commentsCount = articlesInAPI.commentsCount ?: return null
+        val createdAt = articlesInAPI.createdAt?.toDateInISO8601() ?: return null
+        val likesCount = articlesInAPI.likesCount ?: return null
+        val tags = convertTagsInAPI(articlesInAPI.tags)
+        val url = articlesInAPI.url ?: return null
+        val user = articlesInAPI.user?.let { convertUserInAPI(it) } ?: return null
 
-            Article.Remote(
-                articleId,
-                title,
-                bodyMarkDown,
-                commentsCount,
-                createdAt,
-                likesCount,
-                tags,
-                url,
-                user
-            )
-        }
+        return Article.Remote(
+            articleId,
+            title,
+            bodyMarkDown,
+            commentsCount,
+            createdAt,
+            likesCount,
+            tags,
+            url,
+            user
+        )
     }
 
     private fun convertTagsInAPI(tagsInAPI: List<TagInAPI>): List<Tag.Remote> {
@@ -112,8 +120,8 @@ class QiitaUseCaseImpl @Inject constructor(
 
     private fun convertUserInAPI(userInAPI: UserInAPI): User.Remote? {
         val id = userInAPI.id ?: return null
-        val name = userInAPI.name ?: return null
-        val description = userInAPI.description ?: return null
+        val name = userInAPI.name
+        val description = userInAPI.description
         val profileImageUrl = userInAPI.profileImageUrl ?: return null
 
         return User.Remote(

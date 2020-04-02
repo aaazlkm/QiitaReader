@@ -9,5 +9,8 @@ import retrofit2.http.Url
 interface QiitaService {
 
     @GET
+    fun fetchArticle(@Url url: String): Single<ArticleInAPI>
+
+    @GET
     fun fetchArticles(@Url url: String, @QueryMap parameters: Map<String, String>): Single<List<ArticleInAPI>>
 }

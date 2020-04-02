@@ -18,6 +18,7 @@ import javax.inject.Singleton
     DatabaseModule::class,
     DomainModule::class,
     InfraModule::class,
+    MarkdownModule::class,
     NetworkModule::class,
     ArticleActivityBuilder::class
 ])
