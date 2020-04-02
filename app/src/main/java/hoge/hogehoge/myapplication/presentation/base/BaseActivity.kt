@@ -2,7 +2,7 @@ package hoge.hogehoge.myapplication.presentation.base
 
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.android.support.DaggerAppCompatActivity
 import hoge.hogehoge.myapplication.R
 import hoge.hogehoge.myapplication.presentation.NavigationController
@@ -19,6 +19,21 @@ open class BaseActivity : DaggerAppCompatActivity() {
         findViewById<View>(R.id.loadingView)
     }
 
+    //region Activity override methods
+
+    override fun onSupportNavigateUp(): Boolean {
+        navigationController.popFragment()
+        return super.onSupportNavigateUp()
+    }
+
+    //endregion
+
+    fun setupActionBar(title: String) {
+        val canback = supportFragmentManager.backStackEntryCount > 1
+        supportActionBar?.setDisplayHomeAsUpEnabled(canback)
+        supportActionBar?.title = title
+    }
+
     fun showToast(message: String) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
     }
@@ -32,7 +47,7 @@ open class BaseActivity : DaggerAppCompatActivity() {
         doOnClickNegative: (() -> Unit)? = null
 
     ) {
-        AlertDialog.Builder(this)
+        MaterialAlertDialogBuilder(this)
             .setTitle(title)
             .setMessage(message)
             .setPositiveButton(positiveText) { _, _ ->

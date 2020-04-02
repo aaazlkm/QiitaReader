@@ -6,8 +6,8 @@ package hoge.hogehoge.myapplication.domain.entity
 sealed class User {
     data class Remote(
         val id: String,
-        val name: String,
-        val description: String,
+        val name: String?,
+        val description: String?,
         val profileImageUrl: String
     )
 }

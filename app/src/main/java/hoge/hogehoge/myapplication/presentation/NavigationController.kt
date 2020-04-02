@@ -13,8 +13,8 @@ class NavigationController @Inject constructor(
     private val containerId: Int = R.id.container
     private val fragmentManager = activity.supportFragmentManager
 
-    fun toArticleFragment() {
-        replaceFragment(ArticleFragment.newInstance())
+    fun toArticleFragment(articleId: String) {
+        replaceFragment(ArticleFragment.newInstance(articleId))
     }
 
     fun toArticleListFragment() {

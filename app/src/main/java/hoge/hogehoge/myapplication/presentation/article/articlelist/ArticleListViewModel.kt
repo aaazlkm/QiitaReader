@@ -23,43 +23,74 @@ class ArticleListViewModel @Inject constructor(
 
     private val compositeDisposable = CompositeDisposable()
 
+    //region articles cache
+
     /** 最後に読み込んだQiitaのページ */
     private var lastReadPage = INITIAL_LAST_READ_PAGE
 
+    private var lastScrollPosition: Int = 0
+
+    private var articlesCache = mutableListOf<Article.Remote>()
+
+    //endregion
+
     //region event
 
-    private val articlesEventProcessor = BehaviorProcessor.createDefault<Result<List<Article.Remote>>>(Result.onReady())
-    val articlesEvent: Flowable<Result<List<Article.Remote>>> = articlesEventProcessor.observeOn(AndroidSchedulers.mainThread())
+    private val eventOfGettingArticlesProcessor = BehaviorProcessor.createDefault<Result<List<Article.Remote>>>(Result.onReady())
+    val eventOfGettingArticles: Flowable<Result<List<Article.Remote>>> = eventOfGettingArticlesProcessor.observeOn(AndroidSchedulers.mainThread())
 
     //endregion
 
     //region value
 
-    val isLoading: Flowable<Boolean> = articlesEvent.map { it is Result.Loading }
+    val isLoading: Flowable<Boolean> = eventOfGettingArticles.map { it is Result.Loading }.observeOn(AndroidSchedulers.mainThread())
 
-    private val articlesProcessor = PublishProcessor.create<List<Article.Remote>>()
-    val articles: Flowable<List<Article.Remote>> = articlesProcessor.observeOn(AndroidSchedulers.mainThread())
+    private val articlesProcessor = PublishProcessor.create<ArticleResult>()
+    val articles: Flowable<ArticleResult> = articlesProcessor.observeOn(AndroidSchedulers.mainThread())
 
     //endregion
+
+    //region ViewModel override methods
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.clear()
     }
 
-    fun fetchArticlesIfNotLoading() {
+    //endregion
+
+    fun fetchArticlesOrCache() {
         // ローディング中の場合、リクエストを無視する
-        if (articlesEventProcessor.value is Result.Loading) return
+        if (eventOfGettingArticlesProcessor.value is Result.Loading) return
+
+        if (articlesCache.isNotEmpty()) {
+            articlesProcessor.onNext(ArticleResult.Cache(lastScrollPosition, articlesCache))
+        } else {
+            fetchArticles()
+        }
+    }
+
+    fun fetchArticles() {
+        // ローディング中の場合、リクエストを無視する
+        if (eventOfGettingArticlesProcessor.value is Result.Loading) return
 
         qiitaUseCase.fetchArticles(lastReadPage, COUNT_ARTICLE_PER_PAGE)
-            .doOnNext { if (it is Result.Success) articlesProcessor.onNext(it.value) }
-            .subscribe { result -> articlesEventProcessor.onNext(result) }
+            .doOnNext { if (it is Result.Success) articlesProcessor.onNext(ArticleResult.New(it.value)) }
+            .subscribe { result -> eventOfGettingArticlesProcessor.onNext(result) }
             .addTo(compositeDisposable)
 
         lastReadPage++
     }
 
-    fun resetLastReadPage() {
-        lastReadPage = INITIAL_LAST_READ_PAGE
+    fun saveState(lastScrollPosition: Int, articles: List<Article.Remote>) {
+        this.lastScrollPosition = lastScrollPosition
+        this.articlesCache.clear()
+        this.articlesCache.addAll(articles)
+    }
+
+    fun resetState() {
+        this.lastReadPage = INITIAL_LAST_READ_PAGE
+        this.lastScrollPosition = 0
+        this.articlesCache.clear()
     }
 }

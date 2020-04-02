@@ -22,10 +22,16 @@ class ArticleListAdapter(
     private val context: Context,
     private val compositeDisposable: CompositeDisposable
 ) : RecyclerView.Adapter<ArticleListAdapter.ViewHolder>() {
-    private val articles = mutableListOf<Article.Remote>()
+    interface OnItemClickListener {
+        fun onItemClicked(article: Article)
+    }
+
+    val articles = mutableListOf<Article.Remote>()
 
     private val urlToUserIconCache = mutableMapOf<String, Bitmap>()
     private val urlToDisposable = mutableMapOf<String, Disposable>()
+
+    private var onItemClickListener: OnItemClickListener? = null
 
     class ViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -43,6 +49,7 @@ class ArticleListAdapter(
             likeCountText.text = context.getString(R.string.item_article_lgtm, article.likesCount)
             userNameText.text = context.getString(R.string.item_article_by, article.user.id)
             createdAtText.text = context.getString(R.string.item_article_at, article.createdAt.format("yyyy/MM/dd"))
+            container.setOnClickListener { onItemClickListener?.onItemClicked(article) }
         }
         loadUserIcon(holder, article.user.profileImageUrl)
     }
@@ -64,6 +71,14 @@ class ArticleListAdapter(
         urlToDisposable.values.forEach { it.dispose() }
         urlToDisposable.clear()
         notifyDataSetChanged()
+    }
+
+    fun setOnItemClickListener(listener: OnItemClickListener) {
+        this.onItemClickListener = listener
+    }
+
+    fun removeOnItemClickListener() {
+        this.onItemClickListener = null
     }
 
     //region load user icon

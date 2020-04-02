@@ -14,6 +14,7 @@ class ArticleActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_article)
 
+        setSupportActionBar(binding.toolbar)
         navigationController.toArticleListFragment()
     }
 }

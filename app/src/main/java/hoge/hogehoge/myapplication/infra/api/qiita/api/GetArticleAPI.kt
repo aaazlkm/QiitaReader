@@ -6,21 +6,14 @@ import hoge.hogehoge.myapplication.infra.api.template.APIRequest
 
 object GetArticleAPI {
     data class Request(
-        val page: Int,
-        val perPage: Int
+        val itemId: String
     ) : APIRequest {
-        enum class QueryName(val queryName: String) {
-            PAGE("page"),
-            PER_OAGE("per_page");
-        }
-
-        override var configuration: APIConfiguration =
-            QiitaAPIConfiguration.GET_ARTICLES
+        override var configuration: APIConfiguration = QiitaAPIConfiguration.GET_ARTICLE
 
         override val parameters: Map<String, String>
-            get() = mapOf(
-                QueryName.PAGE.queryName to page.toString(),
-                QueryName.PER_OAGE.queryName to perPage.toString()
-            )
+            get() = mapOf()
+
+        override val path: String
+            get() = configuration.path + "/$itemId"
     }
 }

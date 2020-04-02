@@ -9,10 +9,18 @@
     <string name="common_dialog_retry">再試行</string>
 
     <!--  fragment article list -->
+    <string name="fragment_article_list_title">記事一覧画面</string>
     <string name="error_get_articles_title">記事の取得に失敗しました</string>
     <string name="error_get_articles_message">インターネットの接続を確認してください</string>
     <string name="item_article_lgtm">LGTM %d</string>
     <string name="item_article_by">by %s</string>
     <string name="item_article_at">at %s</string>
+
+    <!--  fragment article -->
+    <string name="toast_success_to_save_article">保存しました</string>
+    <string name="dialog_confirm_saving_article_title">この記事を保存しますか？</string>
+    <string name="error_get_article_id">記事IDを取得できませんでした</string>
+    <string name="error_get_article">記事の取得に失敗しました</string>
+    <string name="error_save_article">記事の保存に失敗しました</string>
 
 </resources>
