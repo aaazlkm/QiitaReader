@@ -15,6 +15,6 @@ class ArticleActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_article)
 
         setSupportActionBar(binding.toolbar)
-        navigationController.toArticleListFragment()
+        navigationController.toArticlePagerFragment()
     }
 }

@@ -3,8 +3,9 @@ package hoge.hogehoge.myapplication.presentation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.presentation.article.article.ArticleFragment
-import hoge.hogehoge.myapplication.presentation.article.articlelist.ArticleListFragment
+import hoge.hogehoge.myapplication.presentation.article.articlelist.trend.ArticleTrendFragment
+import hoge.hogehoge.myapplication.presentation.article.articlepager.ArticlePagerFragment
+import hoge.hogehoge.myapplication.presentation.article.articleviewer.ArticleViewerFragment
 import javax.inject.Inject
 
 class NavigationController @Inject constructor(
@@ -13,12 +14,12 @@ class NavigationController @Inject constructor(
     private val containerId: Int = R.id.container
     private val fragmentManager = activity.supportFragmentManager
 
-    fun toArticleFragment(articleId: String) {
-        replaceFragment(ArticleFragment.newInstance(articleId))
+    fun toArticleViewerFragment(articleId: String) {
+        replaceFragment(ArticleViewerFragment.newInstance(articleId))
     }
 
-    fun toArticleListFragment() {
-        replaceFragment(ArticleListFragment.newInstance())
+    fun toArticlePagerFragment() {
+        replaceFragment(ArticlePagerFragment.newInstance())
     }
 
     fun popFragment() {

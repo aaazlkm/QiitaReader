@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.myapplication.R
@@ -18,18 +17,20 @@ import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 import timber.log.Timber
 
-class ArticleListFragment : BaseFragment() {
-    companion object {
-        fun newInstance(): ArticleListFragment {
-            return ArticleListFragment()
-        }
-    }
-
+abstract class ArticleListFragment : BaseFragment() {
     private lateinit var binding: FragmentArticleListBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: ArticleListViewModel
+    open lateinit var viewModel: ArticleListViewModel
+
+    /**
+     * ViewModelを生成する
+     *
+     * @param viewModelFactory ViewModelFactory
+     * @return ArticleListViewModel
+     */
+    abstract fun createViewModel(viewModelFactory: ViewModelFactory): ArticleListViewModel
 
     //region lifecycle
 
@@ -39,9 +40,8 @@ class ArticleListFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_list, container, false)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleListViewModel::class.java)
+        viewModel = createViewModel(viewModelFactory)
 
         bindUI()
         bindViewModelEvent()
@@ -83,7 +83,7 @@ class ArticleListFragment : BaseFragment() {
             adapter = ArticleListAdapter(context, compositeDisposable).apply {
                 setOnItemClickListener(object : ArticleListAdapter.OnItemClickListener {
                     override fun onItemClicked(article: Article) {
-                        navigationController.toArticleFragment(article.articleId)
+                        navigationController.toArticleViewerFragment(article.articleId)
                     }
                 })
             }
