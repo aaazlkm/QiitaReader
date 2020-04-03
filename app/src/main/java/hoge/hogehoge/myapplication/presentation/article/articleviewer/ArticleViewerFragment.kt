@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.presentation.article.article
+package hoge.hogehoge.myapplication.presentation.article.articleviewer
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -14,15 +14,15 @@ import hoge.hogehoge.myapplication.domain.result.Result
 import hoge.hogehoge.myapplication.presentation.base.BaseFragment
 import io.noties.markwon.Markwon
 import io.reactivex.rxkotlin.addTo
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
-class ArticleFragment : BaseFragment() {
+class ArticleViewerFragment : BaseFragment() {
     companion object {
         private const val KEY_ARTICLE_ID = "KEY_ARTICLE_ID"
 
-        fun newInstance(articleId: String): ArticleFragment {
-            return ArticleFragment().apply {
+        fun newInstance(articleId: String): ArticleViewerFragment {
+            return ArticleViewerFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_ARTICLE_ID, articleId)
                 }
@@ -34,7 +34,7 @@ class ArticleFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: ArticleViewModel
+    private lateinit var viewModel: ArticleViewerViewModel
 
     private lateinit var articleId: String
 
@@ -51,7 +51,7 @@ class ArticleFragment : BaseFragment() {
         super.onCreateView(inflater, container, savedInstanceState)
 
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article, container, false)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewerViewModel::class.java)
         articleId = arguments?.getString(KEY_ARTICLE_ID) ?: run {
             handleErrorWhenFailedToGetArticleId(Exception("記事IDの取得に失敗しました"))
             return binding.root

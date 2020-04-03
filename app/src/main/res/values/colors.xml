@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_primary">@color/mc_grey_50</color>
+    <color name="color_on_primary">@color/mc_grey_600</color>
     <color name="color_primary_dark">@color/mc_grey_600</color>
     <color name="color_accent">@color/mc_teal_500</color>
 
