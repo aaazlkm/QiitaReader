@@ -26,7 +26,7 @@ interface ArticleActivityModule {
     fun bindsArticleActivity(articleActivity: ArticleActivity): AppCompatActivity
 
     @ContributesAndroidInjector
-    fun contributeArticleFragment(): ArticleViewerFragment
+    fun contributeArticleViewerFragment(): ArticleViewerFragment
 
     @ContributesAndroidInjector
     fun contributeArticlePagerFragment(): ArticlePagerFragment

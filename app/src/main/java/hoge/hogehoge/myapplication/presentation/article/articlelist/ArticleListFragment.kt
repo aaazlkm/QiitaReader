@@ -22,7 +22,7 @@ abstract class ArticleListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    open lateinit var viewModel: ArticleListViewModel
+    private lateinit var viewModel: ArticleListViewModel
 
     /**
      * ViewModelを生成する

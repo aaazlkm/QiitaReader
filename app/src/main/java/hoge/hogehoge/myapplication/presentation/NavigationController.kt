@@ -3,7 +3,6 @@ package hoge.hogehoge.myapplication.presentation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.presentation.article.articlelist.trend.ArticleTrendFragment
 import hoge.hogehoge.myapplication.presentation.article.articlepager.ArticlePagerFragment
 import hoge.hogehoge.myapplication.presentation.article.articleviewer.ArticleViewerFragment
 import javax.inject.Inject
