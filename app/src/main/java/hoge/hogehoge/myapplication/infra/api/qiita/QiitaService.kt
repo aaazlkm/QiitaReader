@@ -12,5 +12,5 @@ interface QiitaService {
     fun fetchArticle(@Url url: String): Single<ArticleInAPI>
 
     @GET
-    fun fetchArticles(@Url url: String, @QueryMap parameters: Map<String, String>): Single<List<ArticleInAPI>>
+    fun fetchArticles(@Url url: String, @QueryMap(encoded = true) parameters: Map<String, String>): Single<List<ArticleInAPI>>
 }

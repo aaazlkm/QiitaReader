@@ -35,6 +35,14 @@ class ArticlePagerFragment : BaseFragment() {
 
     //endregion
 
+    //region override BaseFragment methods
+
+    override fun setupActionBar(title: String) {
+        super.setupActionBar(getString(R.string.fragment_article_pager_title))
+    }
+
+    //endregion
+
     private fun bindUI() {
         with(binding.viewPager) {
             adapter = ArticleFragmentPagerAdapter(context, childFragmentManager)

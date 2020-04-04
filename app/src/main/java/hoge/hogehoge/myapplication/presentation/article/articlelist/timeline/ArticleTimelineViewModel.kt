@@ -12,6 +12,6 @@ class ArticleTimelineViewModel @Inject constructor(
 ) : ArticleListViewModel() {
 
     override fun getArticleDataSource(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
-        return qiitaUseCase.fetchArticles(page, perPage)
+        return qiitaUseCase.fetchTimelineArticles(page, perPage)
     }
 }

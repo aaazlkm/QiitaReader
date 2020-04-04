@@ -63,7 +63,7 @@ abstract class ArticleListFragment : BaseFragment() {
     //region override BaseFragment methods
 
     override fun setupActionBar(title: String) {
-        super.setupActionBar(getString(R.string.fragment_article_list_title))
+        super.setupActionBar(getString(R.string.fragment_article_pager_title))
     }
 
     //endregion

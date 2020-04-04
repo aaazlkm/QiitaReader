@@ -5,7 +5,7 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import hoge.hogehoge.myapplication.API_TIME_OUT_IN_SECONDS
+import hoge.hogehoge.myapplication.API_TIME_OUT_UNIT_SECONDS
 import hoge.hogehoge.myapplication.QIITA_BASE_URL
 import hoge.hogehoge.myapplication.infra.api.qiita.QiitaService
 import io.reactivex.schedulers.Schedulers
@@ -45,9 +45,9 @@ open class NetworkModule {
     @Provides
     fun provideOkHttpClient(httpLoggingInterceptor: HttpLoggingInterceptor): OkHttpClient {
         return OkHttpClient.Builder()
-            .connectTimeout(API_TIME_OUT_IN_SECONDS, TimeUnit.SECONDS)
-            .readTimeout(API_TIME_OUT_IN_SECONDS, TimeUnit.SECONDS)
-            .writeTimeout(API_TIME_OUT_IN_SECONDS, TimeUnit.SECONDS)
+            .connectTimeout(API_TIME_OUT_UNIT_SECONDS, TimeUnit.SECONDS)
+            .readTimeout(API_TIME_OUT_UNIT_SECONDS, TimeUnit.SECONDS)
+            .writeTimeout(API_TIME_OUT_UNIT_SECONDS, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
             .build()
     }

@@ -12,6 +12,6 @@ class ArticlePopularViewModel @Inject constructor(
 ) : ArticleListViewModel() {
 
     override fun getArticleDataSource(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
-        return qiitaUseCase.fetchArticles(page, perPage)
+        return qiitaUseCase.fetchPopularArticles(page, perPage)
     }
 }

@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.common.ex
+package hoge.hogehoge.myapplication.common.extension
 
 import java.text.SimpleDateFormat
 import java.util.Date

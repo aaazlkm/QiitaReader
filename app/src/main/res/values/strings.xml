@@ -9,13 +9,13 @@
     <string name="common_dialog_retry">再試行</string>
 
     <!--  fragment article pager  -->
+    <string name="fragment_article_pager_title">ホーム</string>
     <string name="fragment_article_pager_tab_trend">トレンド</string>
     <string name="fragment_article_pager_tab_popular">人気の記事</string>
     <string name="fragment_article_pager_tab_timeline">タイムライン</string>
     <string name="fragment_article_pager_tab_saved">保存済み</string>
 
     <!--  fragment article list -->
-    <string name="fragment_article_list_title">記事一覧画面</string>
     <string name="error_get_articles_title">記事の取得に失敗しました</string>
     <string name="error_get_articles_message">インターネットの接続を確認してください</string>
     <string name="item_article_lgtm">LGTM %d</string>
