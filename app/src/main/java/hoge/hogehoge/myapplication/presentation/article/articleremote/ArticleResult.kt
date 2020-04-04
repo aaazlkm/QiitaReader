@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.presentation.article.articlelist
+package hoge.hogehoge.myapplication.presentation.article.articleremote
 
 import hoge.hogehoge.myapplication.domain.entity.Article
 

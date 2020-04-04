@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.presentation.article.articlelist
+package hoge.hogehoge.myapplication.presentation.article.articleremote
 
 import androidx.lifecycle.ViewModel
 import hoge.hogehoge.myapplication.domain.entity.Article
@@ -11,7 +11,7 @@ import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.rxkotlin.addTo
 
-abstract class ArticleListViewModel : ViewModel() {
+abstract class ArticleRemoteViewModel : ViewModel() {
     companion object {
         const val INITIAL_LAST_READ_PAGE = 1
         /** 1ページ当たりに読み込む記事の数 */

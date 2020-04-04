@@ -1,17 +1,17 @@
-package hoge.hogehoge.myapplication.presentation.article.articlelist.trend
+package hoge.hogehoge.myapplication.presentation.article.articleremote.timeline
 
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.result.Result
 import hoge.hogehoge.myapplication.domain.usecase.QiitaUseCase
-import hoge.hogehoge.myapplication.presentation.article.articlelist.ArticleListViewModel
+import hoge.hogehoge.myapplication.presentation.article.articleremote.ArticleRemoteViewModel
 import io.reactivex.Observable
 import javax.inject.Inject
 
-class ArticleTrendViewModel @Inject constructor(
+class ArticleTimelineViewModel @Inject constructor(
     private val qiitaUseCase: QiitaUseCase
-) : ArticleListViewModel() {
+) : ArticleRemoteViewModel() {
 
     override fun getArticleDataSource(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
-        return qiitaUseCase.fetchTrendArticles(page, perPage)
+        return qiitaUseCase.fetchTimelineArticles(page, perPage)
     }
 }

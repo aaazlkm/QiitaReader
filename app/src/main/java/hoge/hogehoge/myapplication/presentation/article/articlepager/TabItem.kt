@@ -3,9 +3,9 @@ package hoge.hogehoge.myapplication.presentation.article.articlepager
 import android.content.Context
 import androidx.fragment.app.Fragment
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.presentation.article.articlelist.popular.ArticlePopularFragment
-import hoge.hogehoge.myapplication.presentation.article.articlelist.timeline.ArticleTimelineFragment
-import hoge.hogehoge.myapplication.presentation.article.articlelist.trend.ArticleTrendFragment
+import hoge.hogehoge.myapplication.presentation.article.articleremote.popular.ArticlePopularFragment
+import hoge.hogehoge.myapplication.presentation.article.articleremote.timeline.ArticleTimelineFragment
+import hoge.hogehoge.myapplication.presentation.article.articleremote.trend.ArticleTrendFragment
 import hoge.hogehoge.myapplication.presentation.article.articlesaved.ArticleSavedFragment
 
 enum class TabItem {

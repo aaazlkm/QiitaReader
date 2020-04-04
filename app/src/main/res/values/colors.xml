@@ -9,7 +9,11 @@
     <color name="common_text_main">@color/mc_grey_800</color>
     <color name="common_text_sub">@color/mc_grey_500</color>
 
-    <!--  fragment article list -->
+    <!--  common background  -->
+    <color name="common_background_main">@color/mc_grey_50</color>
+    <color name="common_background_sub">@color/mc_grey_100</color>
+
+    <!--  fragment article remote -->
     <color name="image_loading">@color/mc_grey_400</color>
     <color name="item_article_background">@color/mc_white</color>
     <color name="item_article_border">@color/mc_grey_200</color>
