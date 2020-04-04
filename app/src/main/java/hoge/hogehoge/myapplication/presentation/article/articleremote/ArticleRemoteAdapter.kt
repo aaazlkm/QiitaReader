@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.presentation.article.articlelist
+package hoge.hogehoge.myapplication.presentation.article.articleremote
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -18,10 +18,10 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
 import timber.log.Timber
 
-class ArticleListAdapter(
+class ArticleRemoteAdapter(
     private val context: Context,
     private val compositeDisposable: CompositeDisposable
-) : RecyclerView.Adapter<ArticleListAdapter.ViewHolder>() {
+) : RecyclerView.Adapter<ArticleRemoteAdapter.ViewHolder>() {
     interface OnItemClickListener {
         fun onItemClicked(article: Article)
     }
@@ -35,7 +35,7 @@ class ArticleListAdapter(
 
     class ViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
 
-    //region override methods of RecyclerView.Adapter
+    //region RecyclerView.Adapter override methods
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding: ItemArticleBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_article, parent, false)
@@ -46,9 +46,9 @@ class ArticleListAdapter(
         val article = articles[position]
         with(holder.binding) {
             titleText.text = article.title
-            likeCountText.text = context.getString(R.string.item_article_lgtm, article.likesCount)
-            userNameText.text = context.getString(R.string.item_article_by, article.user.id)
-            createdAtText.text = context.getString(R.string.item_article_at, article.createdAt.format("yyyy/MM/dd"))
+            likeCountText.text = context.getString(R.string.fragment_article_remote_item_article_lgtm, article.likesCount)
+            userNameText.text = context.getString(R.string.fragment_article_remote_item_article_by, article.user.id)
+            createdAtText.text = context.getString(R.string.fragment_article_remote_item_article_at, article.createdAt.format("yyyy/MM/dd"))
             container.setOnClickListener { onItemClickListener?.onItemClicked(article) }
         }
         loadUserIcon(holder, article.user.profileImageUrl)

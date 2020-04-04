@@ -97,8 +97,7 @@ class QiitaUseCaseImpl @Inject constructor(
         return qiitaRepository.upsertSavedArticles(*articlesInDB).toResult()
     }
 
-    override fun deleteSavedArticle(article: Article): Observable<Result<Boolean>> {
-        if (article !is Article.Local) return Observable.error(QiitaException.FaildToDeleteArticle)
+    override fun deleteSavedArticle(article: Article.Local): Observable<Result<Boolean>> {
         val articleInDB = ArticleInDB(
             article.articleId,
             article.title,

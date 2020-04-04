@@ -46,5 +46,5 @@ interface QiitaUseCase {
 
     fun upsertSavedArticles(vararg articles: Article): Observable<Result<Boolean>>
 
-    fun deleteSavedArticle(article: Article): Observable<Result<Boolean>>
+    fun deleteSavedArticle(article: Article.Local): Observable<Result<Boolean>>
 }

@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.databinding.FragmentArticleBinding
+import hoge.hogehoge.myapplication.databinding.FragmentArticleViewerBinding
 import hoge.hogehoge.myapplication.di.viewmodel.ViewModelFactory
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.result.Result
@@ -30,7 +30,7 @@ class ArticleViewerFragment : BaseFragment() {
         }
     }
 
-    private lateinit var binding: FragmentArticleBinding
+    private lateinit var binding: FragmentArticleViewerBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
@@ -50,7 +50,7 @@ class ArticleViewerFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_viewer, container, false)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewerViewModel::class.java)
         articleId = arguments?.getString(KEY_ARTICLE_ID) ?: run {
             handleErrorWhenFailedToGetArticleId(Exception("記事IDの取得に失敗しました"))
@@ -99,7 +99,7 @@ class ArticleViewerFragment : BaseFragment() {
                 Timber.d("eventOfSavingArticle :$result")
                 when (result) {
                     is Result.Success -> {
-                        showToast(getString(R.string.toast_success_to_save_article))
+                        showToast(getString(R.string.fragment_article_viewer_toast_save_article))
                     }
                     is Result.Failure -> {
                         handleErrorWhenFailedToSaveArticle(result.error)
@@ -137,7 +137,7 @@ class ArticleViewerFragment : BaseFragment() {
     //region dialog
 
     private fun showDialogConfirmationOfSavingArticle(article: Article) {
-        val title = getString(R.string.dialog_confirm_saving_article_title)
+        val title = getString(R.string.fragment_article_viewer_dialog_confirm_saving_article_title)
 
         showDialog(
             title,
@@ -154,19 +154,19 @@ class ArticleViewerFragment : BaseFragment() {
 
     private fun handleErrorWhenFailedToGetArticleId(error: Throwable) {
         Timber.e(error)
-        showToast(getString(hoge.hogehoge.myapplication.R.string.error_get_article_id))
+        showToast(getString(hoge.hogehoge.myapplication.R.string.fragment_article_viewer_error_get_article_id))
         navigationController.popFragment()
     }
 
     private fun handleErrorWhenFailedToGetArticle(error: Throwable) {
         Timber.e(error)
-        showToast(getString(hoge.hogehoge.myapplication.R.string.error_get_article))
+        showToast(getString(hoge.hogehoge.myapplication.R.string.fragment_article_viewer_error_get_article))
         navigationController.popFragment()
     }
 
     private fun handleErrorWhenFailedToSaveArticle(error: Throwable) {
         Timber.e(error)
-        showToast(getString(R.string.error_save_article))
+        showToast(getString(R.string.fragment_article_viewer_error_save_article))
     }
 
     //endregion

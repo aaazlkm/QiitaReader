@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.presentation.article.articlelist
+package hoge.hogehoge.myapplication.presentation.article.articleremote
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,29 +8,31 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.databinding.FragmentArticleListBinding
+import hoge.hogehoge.myapplication.databinding.FragmentArticleRemoteBinding
 import hoge.hogehoge.myapplication.di.viewmodel.ViewModelFactory
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.result.Result
 import hoge.hogehoge.myapplication.presentation.base.BaseFragment
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
+import kotlinx.android.synthetic.main.view_retry.view.messageText
+import kotlinx.android.synthetic.main.view_retry.view.retryButton
 import timber.log.Timber
 
-abstract class ArticleListFragment : BaseFragment() {
-    private lateinit var binding: FragmentArticleListBinding
+abstract class ArticleRemoteFragment : BaseFragment() {
+    private lateinit var binding: FragmentArticleRemoteBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: ArticleListViewModel
+    private lateinit var viewModel: ArticleRemoteViewModel
 
     /**
      * ViewModelを生成する
      *
      * @param viewModelFactory ViewModelFactory
-     * @return ArticleListViewModel
+     * @return ArticleRemoteViewModel
      */
-    abstract fun createViewModel(viewModelFactory: ViewModelFactory): ArticleListViewModel
+    abstract fun createViewModel(viewModelFactory: ViewModelFactory): ArticleRemoteViewModel
 
     //region lifecycle
 
@@ -40,7 +42,7 @@ abstract class ArticleListFragment : BaseFragment() {
         savedInstanceState: Bundle?
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_list, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_remote, container, false)
         viewModel = createViewModel(viewModelFactory)
 
         bindUI()
@@ -54,7 +56,7 @@ abstract class ArticleListFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         val lastScrollPosition = (binding.articleRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: return
-        val articles = (binding.articleRecyclerView.adapter as? ArticleListAdapter)?.articles ?: return
+        val articles = (binding.articleRecyclerView.adapter as? ArticleRemoteAdapter)?.articles ?: return
         viewModel.saveState(lastScrollPosition, articles)
     }
 
@@ -72,16 +74,16 @@ abstract class ArticleListFragment : BaseFragment() {
         with(binding.swipeRefreshLayout) {
             setColorSchemeResources(R.color.color_accent)
             setOnRefreshListener {
-                (binding.articleRecyclerView.adapter as? ArticleListAdapter)?.clearArticles()
+                (binding.articleRecyclerView.adapter as? ArticleRemoteAdapter)?.clearArticles()
                 viewModel.resetState()
                 viewModel.fetchArticles()
             }
         }
 
         with(binding.articleRecyclerView) {
-            layoutManager = LinearLayoutManager(this@ArticleListFragment.context)
-            adapter = ArticleListAdapter(context, compositeDisposable).apply {
-                setOnItemClickListener(object : ArticleListAdapter.OnItemClickListener {
+            layoutManager = LinearLayoutManager(this@ArticleRemoteFragment.context)
+            adapter = ArticleRemoteAdapter(context, compositeDisposable).apply {
+                setOnItemClickListener(object : ArticleRemoteAdapter.OnItemClickListener {
                     override fun onItemClicked(article: Article) {
                         navigationController.toArticleViewerFragment(article.articleId)
                     }
@@ -123,7 +125,7 @@ abstract class ArticleListFragment : BaseFragment() {
 
         viewModel.articles
             .subscribe {
-                (binding.articleRecyclerView.adapter as? ArticleListAdapter)?.apply {
+                (binding.articleRecyclerView.adapter as? ArticleRemoteAdapter)?.run {
                     insertArticles(it.articles)
                 }
                 when (it) {
@@ -141,18 +143,16 @@ abstract class ArticleListFragment : BaseFragment() {
 
     private fun handleErrorArticlesEvent(error: Throwable) {
         Timber.e(error)
-        val title = getString(R.string.error_get_articles_title)
-        val message = getString(R.string.error_get_articles_message)
+        val message = getString(R.string.fragment_article_remote_error_get_articles_message)
 
-        showDialog(
-            title,
-            message,
-            okText = getString(R.string.common_dialog_retry),
-            cancelText = getString(R.string.common_dialog_cancel_jp),
-            doOnClickOk = {
+        with(binding.retryView.root) {
+            visibility = View.VISIBLE
+            messageText.text = message
+            retryButton.setOnClickListener {
+                binding.retryView.root.visibility = View.GONE
                 viewModel.fetchArticlesOrCache()
             }
-        )
+        }
     }
 
     //endregion
