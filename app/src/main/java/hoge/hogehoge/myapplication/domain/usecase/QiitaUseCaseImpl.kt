@@ -1,7 +1,13 @@
 package hoge.hogehoge.myapplication.domain.usecase
 
-import hoge.hogehoge.myapplication.common.ex.toDateInISO8601
-import hoge.hogehoge.myapplication.common.ex.toResult
+import hoge.hogehoge.myapplication.POPULAR_QUERY_CREATED_FROM_UNIT_YEAR
+import hoge.hogehoge.myapplication.POPULAR_QUERY_STOCKS
+import hoge.hogehoge.myapplication.TREND_QUERY_CREATED_FROM_UNIT_WEEK
+import hoge.hogehoge.myapplication.TREND_QUERY_STOCKS
+import hoge.hogehoge.myapplication.common.extension.addMonth
+import hoge.hogehoge.myapplication.common.extension.addYear
+import hoge.hogehoge.myapplication.common.extension.toDateInISO8601
+import hoge.hogehoge.myapplication.common.extension.toResult
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.entity.Tag
 import hoge.hogehoge.myapplication.domain.entity.User
@@ -32,7 +38,33 @@ class QiitaUseCaseImpl @Inject constructor(
             .toResult()
     }
 
-    override fun fetchArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
+    override fun fetchTrendArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
+        val query = GetArticlesAPI.createQuery(
+            stocks = TREND_QUERY_STOCKS,
+            createdFrom = Date().addMonth(-TREND_QUERY_CREATED_FROM_UNIT_WEEK)
+        )
+        val request = GetArticlesAPI.Request(page, perPage, query)
+        return qiitaRepository
+            .fetchArticles(request)
+            .map { it.mapNotNull { convertArticleInAPI(it) } }
+            .map { it.sortedByDescending { it.likesCount } }
+            .toResult()
+    }
+
+    override fun fetchPopularArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
+        val query = GetArticlesAPI.createQuery(
+            stocks = POPULAR_QUERY_STOCKS,
+            createdFrom = Date().addYear(-POPULAR_QUERY_CREATED_FROM_UNIT_YEAR)
+        )
+        val request = GetArticlesAPI.Request(page, perPage, query)
+        return qiitaRepository
+            .fetchArticles(request)
+            .map { it.mapNotNull { convertArticleInAPI(it) } }
+            .map { it.sortedByDescending { it.likesCount } }
+            .toResult()
+    }
+
+    override fun fetchTimelineArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>> {
         val request = GetArticlesAPI.Request(page, perPage)
         return qiitaRepository
             .fetchArticles(request)

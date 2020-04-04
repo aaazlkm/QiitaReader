@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.common.ex
+package hoge.hogehoge.myapplication.common.extension
 
 import androidx.annotation.CheckResult
 import hoge.hogehoge.myapplication.domain.result.Result

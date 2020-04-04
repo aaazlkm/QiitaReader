@@ -38,4 +38,12 @@ class ArticleSavedFragment : BaseFragment() {
 
         return binding.root
     }
+
+    //region override BaseFragment methods
+
+    override fun setupActionBar(title: String) {
+        super.setupActionBar(getString(R.string.fragment_article_pager_title))
+    }
+
+    //endregion
 }

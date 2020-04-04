@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.common.ex.format
+import hoge.hogehoge.myapplication.common.extension.format
 import hoge.hogehoge.myapplication.common.utility.DownloadUtility
 import hoge.hogehoge.myapplication.databinding.ItemArticleBinding
 import hoge.hogehoge.myapplication.domain.entity.Article
