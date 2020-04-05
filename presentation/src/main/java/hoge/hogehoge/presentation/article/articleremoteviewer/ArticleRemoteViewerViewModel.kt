@@ -13,30 +13,30 @@ import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
 class ArticleRemoteViewerViewModel @Inject constructor(
-    private val qiitaUseCase: hoge.hogehoge.domain.usecase.QiitaUseCase
+    private val qiitaUseCase: QiitaUseCase
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()
 
     //region event
 
-    private val eventOfGettingArticleProcessor = BehaviorProcessor.createDefault<hoge.hogehoge.domain.result.Result<hoge.hogehoge.domain.entity.Article.Remote>>(hoge.hogehoge.domain.result.Result.onReady())
-    val eventOfGettingArticle: Flowable<hoge.hogehoge.domain.result.Result<hoge.hogehoge.domain.entity.Article.Remote>> = eventOfGettingArticleProcessor.observeOn(AndroidSchedulers.mainThread())
+    private val eventOfGettingArticleProcessor = BehaviorProcessor.createDefault<Result<Article.Remote>>(Result.onReady())
+    val eventOfGettingArticle: Flowable<Result<Article.Remote>> = eventOfGettingArticleProcessor.observeOn(AndroidSchedulers.mainThread())
 
-    private val eventOfSavingArticleProcessor = BehaviorProcessor.createDefault<hoge.hogehoge.domain.result.Result<Boolean>>(hoge.hogehoge.domain.result.Result.onReady())
-    val eventOfSavingArticle: Flowable<hoge.hogehoge.domain.result.Result<Boolean>> = eventOfSavingArticleProcessor.observeOn(AndroidSchedulers.mainThread())
+    private val eventOfSavingArticleProcessor = BehaviorProcessor.createDefault<Result<Boolean>>(Result.onReady())
+    val eventOfSavingArticle: Flowable<Result<Boolean>> = eventOfSavingArticleProcessor.observeOn(AndroidSchedulers.mainThread())
 
     //endregion
 
     //region value
 
     val isLoading: Flowable<Boolean> = Flowables.combineLatest(
-        eventOfGettingArticle.map { it is hoge.hogehoge.domain.result.Result.Loading },
-        eventOfSavingArticle.map { it is hoge.hogehoge.domain.result.Result.Loading }
+        eventOfGettingArticle.map { it is Result.Loading },
+        eventOfSavingArticle.map { it is Result.Loading }
     ) { p1, p2 -> p1 || p2 }.observeOn(AndroidSchedulers.mainThread())
 
-    private val articleProcessor = BehaviorProcessor.create<hoge.hogehoge.domain.entity.Article>()
-    val article: Flowable<hoge.hogehoge.domain.entity.Article> = articleProcessor.observeOn(AndroidSchedulers.mainThread())
-    val articleValue: hoge.hogehoge.domain.entity.Article?
+    private val articleProcessor = BehaviorProcessor.create<Article>()
+    val article: Flowable<Article> = articleProcessor.observeOn(AndroidSchedulers.mainThread())
+    val articleValue: Article?
         get() = articleProcessor.value
 
     //endregion
@@ -52,12 +52,12 @@ class ArticleRemoteViewerViewModel @Inject constructor(
 
     fun fetchArticle(articleId: String) {
         qiitaUseCase.fetchArticle(articleId)
-            .doOnNext { if (it is hoge.hogehoge.domain.result.Result.Success) articleProcessor.onNext(it.value) }
+            .doOnNext { if (it is Result.Success) articleProcessor.onNext(it.value) }
             .subscribe { eventOfGettingArticleProcessor.onNext(it) }
             .addTo(compositeDisposable)
     }
 
-    fun saveArticle(article: hoge.hogehoge.domain.entity.Article) {
+    fun saveArticle(article: Article) {
         qiitaUseCase.upsertSavedArticles(article)
             .subscribe { eventOfSavingArticleProcessor.onNext(it) }
             .addTo(compositeDisposable)

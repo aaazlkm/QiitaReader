@@ -13,5 +13,5 @@ open class DomainModule {
     }
 
     @Provides
-    fun provideQiitaUseCase(qiitaRepository: hoge.hogehoge.infra.repository.QiitaRepository): hoge.hogehoge.domain.usecase.QiitaUseCase = hoge.hogehoge.domain.usecase.QiitaUseCaseImpl(qiitaRepository)
+    fun provideQiitaUseCase(qiitaRepository: QiitaRepository): QiitaUseCase = QiitaUseCaseImpl(qiitaRepository)
 }

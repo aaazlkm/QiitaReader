@@ -34,8 +34,7 @@ abstract class ArticleRemoteViewModel : ViewModel() {
     //region event
 
     private val eventOfGettingArticlesProcessor = BehaviorProcessor.createDefault<Result<List<Article.Remote>>>(Result.onReady())
-    val eventOfGettingArticles: Flowable<Result<List<Article.Remote>>> =
-        eventOfGettingArticlesProcessor.observeOn(AndroidSchedulers.mainThread())
+    val eventOfGettingArticles: Flowable<Result<List<Article.Remote>>> = eventOfGettingArticlesProcessor.observeOn(AndroidSchedulers.mainThread())
 
     //endregion
 

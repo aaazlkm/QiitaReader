@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.core.extension.format
-import hoge.hogehoge.domain.entity.Article.Remote
+import hoge.hogehoge.core.utility.DownloadUtility
+import hoge.hogehoge.domain.entity.Article
 import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.databinding.ItemArticleBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -22,10 +23,10 @@ class ArticleRemoteAdapter(
     private val compositeDisposable: CompositeDisposable
 ) : RecyclerView.Adapter<ArticleRemoteAdapter.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClicked(article: hoge.hogehoge.domain.entity.Article)
+        fun onItemClicked(article: Article)
     }
 
-    val articles = mutableListOf<Remote>()
+    val articles = mutableListOf<Article.Remote>()
 
     private val urlToUserIconCache = mutableMapOf<String, Bitmap>()
     private val urlToDisposable = mutableMapOf<String, Disposable>()
@@ -59,7 +60,7 @@ class ArticleRemoteAdapter(
 
     //endregion
 
-    fun insertArticles(articles: List<Remote>) {
+    fun insertArticles(articles: List<Article.Remote>) {
         this.articles.addAll(articles)
         notifyDataSetChanged()
     }
@@ -100,7 +101,7 @@ class ArticleRemoteAdapter(
         urlToDisposable[userIconUrl]?.dispose()
         urlToDisposable.remove(userIconUrl)
 
-        val disposable = hoge.hogehoge.core.utility.DownloadUtility.loadBitmapFromUrl(userIconUrl)
+        val disposable = DownloadUtility.loadBitmapFromUrl(userIconUrl)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = {

@@ -7,72 +7,86 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
 import hoge.hogehoge.core.di.viewmodel.ViewModelKey
+import hoge.hogehoge.presentation.article.ArticleActivity
+import hoge.hogehoge.presentation.article.articlepager.ArticlePagerFragment
+import hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularFragment
+import hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularViewModel
+import hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineFragment
+import hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineViewModel
+import hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendFragment
+import hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendViewModel
+import hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerFragment
+import hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerViewModel
+import hoge.hogehoge.presentation.article.articlesaved.ArticleSavedFragment
+import hoge.hogehoge.presentation.article.articlesaved.ArticleSavedViewModel
+import hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerFragment
+import hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerViewModel
 
 @Module
 interface ArticleActivityModule {
     @Binds
-    fun bindsArticleActivity(articleActivity: hoge.hogehoge.presentation.article.ArticleActivity): AppCompatActivity
+    fun bindsArticleActivity(articleActivity: ArticleActivity): AppCompatActivity
 
     @ContributesAndroidInjector
-    fun contributeArticleRemoteViewerFragment(): hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerFragment
+    fun contributeArticleRemoteViewerFragment(): ArticleRemoteViewerFragment
 
     @ContributesAndroidInjector
-    fun contributeArticleSavedViewerFragment(): hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerFragment
+    fun contributeArticleSavedViewerFragment(): ArticleSavedViewerFragment
 
     @ContributesAndroidInjector
-    fun contributeArticlePagerFragment(): hoge.hogehoge.presentation.article.articlepager.ArticlePagerFragment
+    fun contributeArticlePagerFragment(): ArticlePagerFragment
 
     @ContributesAndroidInjector
-    fun contributeArticleTrendFragment(): hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendFragment
+    fun contributeArticleTrendFragment(): ArticleTrendFragment
 
     @ContributesAndroidInjector
-    fun contributeArticlePopularFragment(): hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularFragment
+    fun contributeArticlePopularFragment(): ArticlePopularFragment
 
     @ContributesAndroidInjector
-    fun contributeArticleTimelineFragment(): hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineFragment
+    fun contributeArticleTimelineFragment(): ArticleTimelineFragment
 
     @ContributesAndroidInjector
-    fun contributeArticleSavedFragment(): hoge.hogehoge.presentation.article.articlesaved.ArticleSavedFragment
+    fun contributeArticleSavedFragment(): ArticleSavedFragment
 
     @Binds
     @IntoMap
-    @ViewModelKey(hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerViewModel::class)
+    @ViewModelKey(ArticleRemoteViewerViewModel::class)
     fun bindsArticleRemoteViewerViewModel(
-        articleRemoteViewModel: hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerViewModel
+        articleRemoteViewModel: ArticleRemoteViewerViewModel
     ): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerViewModel::class)
+    @ViewModelKey(ArticleSavedViewerViewModel::class)
     fun bindsArticleSavedViewerViewModel(
-        articleSavedViewModel: hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerViewModel
+        articleSavedViewModel: ArticleSavedViewerViewModel
     ): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendViewModel::class)
+    @ViewModelKey(ArticleTrendViewModel::class)
     fun bindsArticleTrendViewModel(
-        articleTrendViewModel: hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendViewModel
+        articleTrendViewModel: ArticleTrendViewModel
     ): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularViewModel::class)
+    @ViewModelKey(ArticlePopularViewModel::class)
     fun bindsArticlePopularViewModel(
-        articlePopularViewModel: hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularViewModel
+        articlePopularViewModel: ArticlePopularViewModel
     ): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineViewModel::class)
+    @ViewModelKey(ArticleTimelineViewModel::class)
     fun bindsArticleTimelineViewModel(
-        articleTimelineViewModel: hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineViewModel
+        articleTimelineViewModel: ArticleTimelineViewModel
     ): ViewModel
 
     @Binds
     @IntoMap
-    @ViewModelKey(hoge.hogehoge.presentation.article.articlesaved.ArticleSavedViewModel::class)
+    @ViewModelKey(ArticleSavedViewModel::class)
     fun bindsArticleSavedViewModel(
-        articleSavedViewModel: hoge.hogehoge.presentation.article.articlesaved.ArticleSavedViewModel
+        articleSavedViewModel: ArticleSavedViewModel
     ): ViewModel
 }

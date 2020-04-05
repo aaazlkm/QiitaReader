@@ -9,14 +9,15 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import hoge.hogehoge.core.di.viewmodel.ViewModelFactory
 import hoge.hogehoge.domain.entity.Article
+import hoge.hogehoge.domain.result.Result
 import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.base.BaseFragment
 import hoge.hogehoge.presentation.databinding.FragmentArticleSavedBinding
 import io.reactivex.rxkotlin.addTo
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.view_retry.messageText
 import kotlinx.android.synthetic.main.view_retry.retryButton
 import timber.log.Timber
+import javax.inject.Inject
 
 class ArticleSavedFragment : BaseFragment() {
     companion object {
@@ -83,7 +84,7 @@ class ArticleSavedFragment : BaseFragment() {
         viewModel.eventOfGettingArticles
             .subscribe { result ->
                 Timber.d("eventOfGettingArticles :$result")
-                if (result is hoge.hogehoge.domain.result.Result.Failure) {
+                if (result is Result.Failure) {
                     handleErrorGettingArticles(result.error)
                 }
             }

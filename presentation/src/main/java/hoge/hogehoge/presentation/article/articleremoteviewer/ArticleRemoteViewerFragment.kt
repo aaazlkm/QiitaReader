@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import hoge.hogehoge.core.di.viewmodel.ViewModelFactory
+import hoge.hogehoge.domain.entity.Article
 import hoge.hogehoge.domain.result.Result
 import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.base.BaseFragment
@@ -87,7 +88,7 @@ class ArticleRemoteViewerFragment : BaseFragment() {
         viewModel.eventOfGettingArticle
             .subscribe { result ->
                 Timber.d("eventOfGettingArticle :$result")
-                if (result is hoge.hogehoge.domain.result.Result.Failure) {
+                if (result is Result.Failure) {
                     handleErrorFailedToGetArticle(result.error)
                 }
             }
@@ -135,7 +136,7 @@ class ArticleRemoteViewerFragment : BaseFragment() {
 
     //region dialog
 
-    private fun showDialogConfirmationOfSavingArticle(article: hoge.hogehoge.domain.entity.Article) {
+    private fun showDialogConfirmationOfSavingArticle(article: Article) {
         val title = getString(R.string.fragment_article_remote_viewer_dialog_confirm_saving_article_title)
 
         showDialog(

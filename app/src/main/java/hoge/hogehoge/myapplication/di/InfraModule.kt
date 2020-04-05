@@ -21,9 +21,9 @@ open class InfraModule {
 
     @Provides
     fun provideQiitaRepository(
-        qiitaLocalStore: hoge.hogehoge.infra.store.QiitaLocalStore,
-        qiitaRemoteStore: hoge.hogehoge.infra.store.QiitaRemoteStore
-    ): hoge.hogehoge.infra.repository.QiitaRepository = hoge.hogehoge.infra.repository.QiitaRepositoryImpl(qiitaLocalStore, qiitaRemoteStore)
+        qiitaLocalStore: QiitaLocalStore,
+        qiitaRemoteStore: QiitaRemoteStore
+    ): QiitaRepository = QiitaRepositoryImpl(qiitaLocalStore, qiitaRemoteStore)
 
     //endregion
 
@@ -31,13 +31,13 @@ open class InfraModule {
 
     @Provides
     fun provideQiitaRemoteStore(
-        qiitaService: hoge.hogehoge.infra.api.qiita.QiitaService
-    ): hoge.hogehoge.infra.store.QiitaRemoteStore = hoge.hogehoge.infra.store.QiitaRemoteStoreImpl(qiitaService)
+        qiitaService: QiitaService
+    ): QiitaRemoteStore = QiitaRemoteStoreImpl(qiitaService)
 
     @Provides
     fun provideQiitaLocalStore(
-        qiitaArticleDao: hoge.hogehoge.infra.database.dao.ArticleDao
-    ): hoge.hogehoge.infra.store.QiitaLocalStore = hoge.hogehoge.infra.store.QiitaLocalStoreImpl(qiitaArticleDao)
+        qiitaArticleDao: ArticleDao
+    ): QiitaLocalStore = QiitaLocalStoreImpl(qiitaArticleDao)
 
     //endregion
 }

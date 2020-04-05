@@ -8,14 +8,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.core.di.viewmodel.ViewModelFactory
+import hoge.hogehoge.domain.entity.Article
+import hoge.hogehoge.domain.result.Result
 import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.base.BaseFragment
 import hoge.hogehoge.presentation.databinding.FragmentArticleRemoteBinding
 import io.reactivex.rxkotlin.addTo
-import javax.inject.Inject
 import kotlinx.android.synthetic.main.view_retry.messageText
 import kotlinx.android.synthetic.main.view_retry.retryButton
 import timber.log.Timber
+import javax.inject.Inject
 
 abstract class ArticleRemoteFragment : BaseFragment() {
     private lateinit var binding: FragmentArticleRemoteBinding
@@ -82,7 +84,7 @@ abstract class ArticleRemoteFragment : BaseFragment() {
             layoutManager = LinearLayoutManager(this@ArticleRemoteFragment.context)
             adapter = ArticleRemoteAdapter(context, compositeDisposable).apply {
                 setOnItemClickListener(object : ArticleRemoteAdapter.OnItemClickListener {
-                    override fun onItemClicked(article: hoge.hogehoge.domain.entity.Article) {
+                    override fun onItemClicked(article: Article) {
                         navigationController.toArticleRemoteViewerFragment(article.articleId)
                     }
                 })
@@ -107,7 +109,7 @@ abstract class ArticleRemoteFragment : BaseFragment() {
         viewModel.eventOfGettingArticles
             .subscribe { result ->
                 Timber.d("eventOfGettingArticles :$result")
-                if (result is hoge.hogehoge.domain.result.Result.Failure) {
+                if (result is Result.Failure) {
                     handleErrorArticlesEvent(result.error)
                 }
             }

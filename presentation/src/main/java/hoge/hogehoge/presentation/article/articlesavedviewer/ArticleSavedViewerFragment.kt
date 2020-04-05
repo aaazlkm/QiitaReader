@@ -10,13 +10,15 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import hoge.hogehoge.core.di.viewmodel.ViewModelFactory
+import hoge.hogehoge.domain.entity.Article
+import hoge.hogehoge.domain.result.Result
 import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.base.BaseFragment
 import hoge.hogehoge.presentation.databinding.FragmentArticleSavedViewerBinding
 import io.noties.markwon.Markwon
 import io.reactivex.rxkotlin.addTo
-import javax.inject.Inject
 import timber.log.Timber
+import javax.inject.Inject
 
 class ArticleSavedViewerFragment : BaseFragment() {
     companion object {
@@ -96,7 +98,7 @@ class ArticleSavedViewerFragment : BaseFragment() {
         viewModel.eventOfGettingArticle
             .subscribe { result ->
                 Timber.d("eventOfGettingArticle :$result")
-                if (result is hoge.hogehoge.domain.result.Result.Failure) {
+                if (result is Result.Failure) {
                     handleErrorFailedToGetArticle(result.error)
                 }
             }
@@ -106,11 +108,11 @@ class ArticleSavedViewerFragment : BaseFragment() {
             .subscribe { result ->
                 Timber.d("eventOfDeletingArticle :$result")
                 when (result) {
-                    is hoge.hogehoge.domain.result.Result.Success -> {
+                    is Result.Success -> {
                         showToast(getString(R.string.fragment_article_remote_viewer_toast_delete_article))
                         navigationController.popFragment()
                     }
-                    is hoge.hogehoge.domain.result.Result.Failure -> {
+                    is Result.Failure -> {
                         handleErrorFailedToDeleteArticle(result.error)
                     }
                 }
@@ -145,7 +147,7 @@ class ArticleSavedViewerFragment : BaseFragment() {
 
     //region dialog
 
-    private fun showDialogConfirmationOfDeletingArticle(article: hoge.hogehoge.domain.entity.Article.Saved) {
+    private fun showDialogConfirmationOfDeletingArticle(article: Article.Saved) {
         val title = getString(R.string.fragment_article_saved_viewer_dialog_confirm_deleting_article_title)
 
         showDialog(
