@@ -46,7 +46,7 @@ class ArticlePagerFragment : BaseFragment() {
     private fun bindUI() {
         with(binding.viewPager) {
             adapter = ArticleFragmentPagerAdapter(context, childFragmentManager)
-            offscreenPageLimit = 2
+            offscreenPageLimit = TabItem.values().size
         }
 
         binding.tabLayout.setupWithViewPager(binding.viewPager)

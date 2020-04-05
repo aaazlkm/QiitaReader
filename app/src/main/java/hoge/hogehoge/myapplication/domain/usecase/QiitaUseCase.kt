@@ -42,9 +42,11 @@ interface QiitaUseCase {
      */
     fun fetchTimelineArticles(page: Int, perPage: Int): Observable<Result<List<Article.Remote>>>
 
-    fun fetchSavedArticles(): Observable<Result<List<Article.Local>>>
+    fun fetchSavedArticle(articleId: String): Observable<Result<Article.Saved>>
+
+    fun fetchSavedArticles(): Observable<Result<List<Article.Saved>>>
 
     fun upsertSavedArticles(vararg articles: Article): Observable<Result<Boolean>>
 
-    fun deleteSavedArticle(article: Article.Local): Observable<Result<Boolean>>
+    fun deleteSavedArticle(article: Article.Saved): Observable<Result<Boolean>>
 }

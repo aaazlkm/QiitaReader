@@ -7,6 +7,7 @@ import hoge.hogehoge.myapplication.infra.database.entity.ArticleInDB
 import hoge.hogehoge.myapplication.infra.store.QiitaLocalStore
 import hoge.hogehoge.myapplication.infra.store.QiitaRemoteStore
 import io.reactivex.Completable
+import io.reactivex.Maybe
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -28,6 +29,10 @@ class QiitaRepositoryImpl @Inject constructor(
     //endregion
 
     //region local
+
+    override fun fetchSavedArticle(articleId: String): Maybe<ArticleInDB> {
+        return qiitaLocalStore.fetchArticle(articleId)
+    }
 
     override fun fetchSavedArticles(): Single<List<ArticleInDB>> {
         return qiitaLocalStore.fetchArticles()

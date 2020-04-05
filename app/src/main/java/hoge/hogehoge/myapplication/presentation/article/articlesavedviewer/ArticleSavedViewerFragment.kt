@@ -1,13 +1,16 @@
-package hoge.hogehoge.myapplication.presentation.article.articleviewer
+package hoge.hogehoge.myapplication.presentation.article.articlesavedviewer
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import hoge.hogehoge.myapplication.R
-import hoge.hogehoge.myapplication.databinding.FragmentArticleViewerBinding
+import hoge.hogehoge.myapplication.databinding.FragmentArticleSavedViewerBinding
 import hoge.hogehoge.myapplication.di.viewmodel.ViewModelFactory
 import hoge.hogehoge.myapplication.domain.entity.Article
 import hoge.hogehoge.myapplication.domain.result.Result
@@ -17,12 +20,12 @@ import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 import timber.log.Timber
 
-class ArticleViewerFragment : BaseFragment() {
+class ArticleSavedViewerFragment : BaseFragment() {
     companion object {
         private const val KEY_ARTICLE_ID = "KEY_ARTICLE_ID"
 
-        fun newInstance(articleId: String): ArticleViewerFragment {
-            return ArticleViewerFragment().apply {
+        fun newInstance(articleId: String): ArticleSavedViewerFragment {
+            return ArticleSavedViewerFragment().apply {
                 arguments = Bundle().apply {
                     putString(KEY_ARTICLE_ID, articleId)
                 }
@@ -30,11 +33,11 @@ class ArticleViewerFragment : BaseFragment() {
         }
     }
 
-    private lateinit var binding: FragmentArticleViewerBinding
+    private lateinit var binding: FragmentArticleSavedViewerBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelFactory
-    private lateinit var viewModel: ArticleViewerViewModel
+    private lateinit var viewModel: ArticleSavedViewerViewModel
 
     private lateinit var articleId: String
 
@@ -50,10 +53,10 @@ class ArticleViewerFragment : BaseFragment() {
     ): View? {
         super.onCreateView(inflater, container, savedInstanceState)
 
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_viewer, container, false)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleViewerViewModel::class.java)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_article_saved_viewer, container, false)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(ArticleSavedViewerViewModel::class.java)
         articleId = arguments?.getString(KEY_ARTICLE_ID) ?: run {
-            handleErrorWhenFailedToGetArticleId(Exception("記事IDの取得に失敗しました"))
+            handleErrorFailedToGetArticleId(Exception("記事IDの取得に失敗しました"))
             return binding.root
         }
 
@@ -67,21 +70,28 @@ class ArticleViewerFragment : BaseFragment() {
 
     //endregion
 
-    private fun bindUI() {
-        binding.floatingActionButton
-            .setOnClickListener {
-                val article = viewModel.articleValue ?: return@setOnClickListener
-                showDialogConfirmationOfSavingArticle(article)
-            }
+    //region menu
 
-        binding.scrollView
-            .setOnScrollChangeListener { _, _, scrollY, _, oldScrollY ->
-                if (scrollY > oldScrollY) {
-                    binding.floatingActionButton.hide()
-                } else if (scrollY < oldScrollY) {
-                    binding.floatingActionButton.show()
-                }
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_article_viewer, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.trash -> {
+                val article = viewModel.articleValue ?: return true
+                showDialogConfirmationOfDeletingArticle(article)
             }
+        }
+        return false
+    }
+
+    //endregion
+
+    private fun bindUI() {
+        setHasOptionsMenu(true)
     }
 
     private fun bindViewModelEvent() {
@@ -89,20 +99,21 @@ class ArticleViewerFragment : BaseFragment() {
             .subscribe { result ->
                 Timber.d("eventOfGettingArticle :$result")
                 if (result is Result.Failure) {
-                    handleErrorWhenFailedToGetArticle(result.error)
+                    handleErrorFailedToGetArticle(result.error)
                 }
             }
             .addTo(compositeDisposable)
 
-        viewModel.eventOfSavingArticle
+        viewModel.eventOfDeletingArticle
             .subscribe { result ->
-                Timber.d("eventOfSavingArticle :$result")
+                Timber.d("eventOfDeletingArticle :$result")
                 when (result) {
                     is Result.Success -> {
-                        showToast(getString(R.string.fragment_article_viewer_toast_save_article))
+                        showToast(getString(R.string.fragment_article_remote_viewer_toast_delete_article))
+                        navigationController.popFragment()
                     }
                     is Result.Failure -> {
-                        handleErrorWhenFailedToSaveArticle(result.error)
+                        handleErrorFailedToDeleteArticle(result.error)
                     }
                 }
             }
@@ -118,7 +129,7 @@ class ArticleViewerFragment : BaseFragment() {
 
         viewModel.article
             .subscribe {
-                setupActionBar(it.title)
+                binding.titleText.text = it.title
                 setMarkdownText(it.bodyMarkDown)
             }
             .addTo(compositeDisposable)
@@ -136,14 +147,14 @@ class ArticleViewerFragment : BaseFragment() {
 
     //region dialog
 
-    private fun showDialogConfirmationOfSavingArticle(article: Article) {
-        val title = getString(R.string.fragment_article_viewer_dialog_confirm_saving_article_title)
+    private fun showDialogConfirmationOfDeletingArticle(article: Article.Saved) {
+        val title = getString(R.string.fragment_article_saved_viewer_dialog_confirm_deleting_article_title)
 
         showDialog(
             title,
             article.title,
             doOnClickOk = {
-                viewModel.saveArticle(article)
+                viewModel.deleteArticle(article)
             }
         )
     }
@@ -152,21 +163,21 @@ class ArticleViewerFragment : BaseFragment() {
 
     //region handle error
 
-    private fun handleErrorWhenFailedToGetArticleId(error: Throwable) {
+    private fun handleErrorFailedToGetArticleId(error: Throwable) {
         Timber.e(error)
-        showToast(getString(hoge.hogehoge.myapplication.R.string.fragment_article_viewer_error_get_article_id))
+        showToast(getString(R.string.fragment_article_saved_viewer_error_get_article_id))
         navigationController.popFragment()
     }
 
-    private fun handleErrorWhenFailedToGetArticle(error: Throwable) {
+    private fun handleErrorFailedToGetArticle(error: Throwable) {
         Timber.e(error)
-        showToast(getString(hoge.hogehoge.myapplication.R.string.fragment_article_viewer_error_get_article))
+        showToast(getString(R.string.fragment_article_saved_viewer_error_get_article))
         navigationController.popFragment()
     }
 
-    private fun handleErrorWhenFailedToSaveArticle(error: Throwable) {
+    private fun handleErrorFailedToDeleteArticle(error: Throwable) {
         Timber.e(error)
-        showToast(getString(R.string.fragment_article_viewer_error_save_article))
+        showToast(getString(R.string.fragment_article_saved_viewer_error_delete_article))
     }
 
     //endregion

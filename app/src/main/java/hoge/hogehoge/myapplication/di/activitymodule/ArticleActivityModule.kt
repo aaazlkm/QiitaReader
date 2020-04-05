@@ -15,10 +15,12 @@ import hoge.hogehoge.myapplication.presentation.article.articleremote.timeline.A
 import hoge.hogehoge.myapplication.presentation.article.articleremote.timeline.ArticleTimelineViewModel
 import hoge.hogehoge.myapplication.presentation.article.articleremote.trend.ArticleTrendFragment
 import hoge.hogehoge.myapplication.presentation.article.articleremote.trend.ArticleTrendViewModel
+import hoge.hogehoge.myapplication.presentation.article.articleremoteviewer.ArticleRemoteViewerFragment
+import hoge.hogehoge.myapplication.presentation.article.articleremoteviewer.ArticleRemoteViewerViewModel
 import hoge.hogehoge.myapplication.presentation.article.articlesaved.ArticleSavedFragment
 import hoge.hogehoge.myapplication.presentation.article.articlesaved.ArticleSavedViewModel
-import hoge.hogehoge.myapplication.presentation.article.articleviewer.ArticleViewerFragment
-import hoge.hogehoge.myapplication.presentation.article.articleviewer.ArticleViewerViewModel
+import hoge.hogehoge.myapplication.presentation.article.articlesavedviewer.ArticleSavedViewerFragment
+import hoge.hogehoge.myapplication.presentation.article.articlesavedviewer.ArticleSavedViewerViewModel
 
 @Module
 interface ArticleActivityModule {
@@ -26,7 +28,10 @@ interface ArticleActivityModule {
     fun bindsArticleActivity(articleActivity: ArticleActivity): AppCompatActivity
 
     @ContributesAndroidInjector
-    fun contributeArticleViewerFragment(): ArticleViewerFragment
+    fun contributeArticleRemoteViewerFragment(): ArticleRemoteViewerFragment
+
+    @ContributesAndroidInjector
+    fun contributeArticleSavedViewerFragment(): ArticleSavedViewerFragment
 
     @ContributesAndroidInjector
     fun contributeArticlePagerFragment(): ArticlePagerFragment
@@ -45,9 +50,16 @@ interface ArticleActivityModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(ArticleViewerViewModel::class)
-    fun bindsArticleViewerViewModel(
-        articleViewModel: ArticleViewerViewModel
+    @ViewModelKey(ArticleRemoteViewerViewModel::class)
+    fun bindsArticleRemoteViewerViewModel(
+        articleRemoteViewModel: ArticleRemoteViewerViewModel
+    ): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ArticleSavedViewerViewModel::class)
+    fun bindsArticleSavedViewerViewModel(
+        articleSavedViewModel: ArticleSavedViewerViewModel
     ): ViewModel
 
     @Binds
