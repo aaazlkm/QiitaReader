@@ -2,14 +2,14 @@ package hoge.hogehoge.myapplication.di
 
 import dagger.Module
 import dagger.Provides
-import hoge.hogehoge.myapplication.infra.api.qiita.QiitaService
-import hoge.hogehoge.myapplication.infra.database.dao.ArticleDao
-import hoge.hogehoge.myapplication.infra.repository.QiitaRepository
-import hoge.hogehoge.myapplication.infra.repository.QiitaRepositoryImpl
-import hoge.hogehoge.myapplication.infra.store.QiitaLocalStore
-import hoge.hogehoge.myapplication.infra.store.QiitaLocalStoreImpl
-import hoge.hogehoge.myapplication.infra.store.QiitaRemoteStore
-import hoge.hogehoge.myapplication.infra.store.QiitaRemoteStoreImpl
+import hoge.hogehoge.infra.api.qiita.QiitaService
+import hoge.hogehoge.infra.database.dao.ArticleDao
+import hoge.hogehoge.infra.repository.QiitaRepository
+import hoge.hogehoge.infra.repository.QiitaRepositoryImpl
+import hoge.hogehoge.infra.store.QiitaLocalStore
+import hoge.hogehoge.infra.store.QiitaLocalStoreImpl
+import hoge.hogehoge.infra.store.QiitaRemoteStore
+import hoge.hogehoge.infra.store.QiitaRemoteStoreImpl
 
 @Module
 open class InfraModule {
@@ -21,9 +21,9 @@ open class InfraModule {
 
     @Provides
     fun provideQiitaRepository(
-        qiitaLocalStore: QiitaLocalStore,
-        qiitaRemoteStore: QiitaRemoteStore
-    ): QiitaRepository = QiitaRepositoryImpl(qiitaLocalStore, qiitaRemoteStore)
+        qiitaLocalStore: hoge.hogehoge.infra.store.QiitaLocalStore,
+        qiitaRemoteStore: hoge.hogehoge.infra.store.QiitaRemoteStore
+    ): hoge.hogehoge.infra.repository.QiitaRepository = hoge.hogehoge.infra.repository.QiitaRepositoryImpl(qiitaLocalStore, qiitaRemoteStore)
 
     //endregion
 
@@ -31,13 +31,13 @@ open class InfraModule {
 
     @Provides
     fun provideQiitaRemoteStore(
-        qiitaService: QiitaService
-    ): QiitaRemoteStore = QiitaRemoteStoreImpl(qiitaService)
+        qiitaService: hoge.hogehoge.infra.api.qiita.QiitaService
+    ): hoge.hogehoge.infra.store.QiitaRemoteStore = hoge.hogehoge.infra.store.QiitaRemoteStoreImpl(qiitaService)
 
     @Provides
     fun provideQiitaLocalStore(
-        qiitaArticleDao: ArticleDao
-    ): QiitaLocalStore = QiitaLocalStoreImpl(qiitaArticleDao)
+        qiitaArticleDao: hoge.hogehoge.infra.database.dao.ArticleDao
+    ): hoge.hogehoge.infra.store.QiitaLocalStore = hoge.hogehoge.infra.store.QiitaLocalStoreImpl(qiitaArticleDao)
 
     //endregion
 }

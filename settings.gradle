@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':presentation', ':domain', ':infra', ':core'
 rootProject.name='QiitaApp'

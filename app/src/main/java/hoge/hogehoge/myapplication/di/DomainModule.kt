@@ -2,9 +2,9 @@ package hoge.hogehoge.myapplication.di
 
 import dagger.Module
 import dagger.Provides
-import hoge.hogehoge.myapplication.domain.usecase.QiitaUseCase
-import hoge.hogehoge.myapplication.domain.usecase.QiitaUseCaseImpl
-import hoge.hogehoge.myapplication.infra.repository.QiitaRepository
+import hoge.hogehoge.domain.usecase.QiitaUseCase
+import hoge.hogehoge.domain.usecase.QiitaUseCaseImpl
+import hoge.hogehoge.infra.repository.QiitaRepository
 
 @Module
 open class DomainModule {
@@ -13,5 +13,5 @@ open class DomainModule {
     }
 
     @Provides
-    fun provideQiitaUseCase(qiitaRepository: QiitaRepository): QiitaUseCase = QiitaUseCaseImpl(qiitaRepository)
+    fun provideQiitaUseCase(qiitaRepository: hoge.hogehoge.infra.repository.QiitaRepository): hoge.hogehoge.domain.usecase.QiitaUseCase = hoge.hogehoge.domain.usecase.QiitaUseCaseImpl(qiitaRepository)
 }

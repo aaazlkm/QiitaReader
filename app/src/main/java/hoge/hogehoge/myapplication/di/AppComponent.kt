@@ -5,9 +5,9 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
 import dagger.android.support.AndroidSupportInjectionModule
+import hoge.hogehoge.core.di.viewmodel.ViewModelModule
+import hoge.hogehoge.myapplication.App
 import hoge.hogehoge.myapplication.di.activitymodule.ArticleActivityBuilder
-import hoge.hogehoge.myapplication.di.viewmodel.ViewModelModule
-import hoge.hogehoge.myapplication.presentation.App
 import javax.inject.Singleton
 
 @Singleton
