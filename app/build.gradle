@@ -7,14 +7,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion constant.compileSdkVersion
     defaultConfig {
-        applicationId "hoge.hogehoge.myapplication"
-        minSdkVersion 24
-        targetSdkVersion 29
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        applicationId constant.applicationId
+        minSdkVersion constant.minSdkVersion
+        targetSdkVersion constant.targetSdkVersion
+        versionCode constant.versionCode
+        versionName constant.versionName
+        testInstrumentationRunner constant.testInstrumentationRunner
     }
     buildTypes {
         release {
@@ -43,72 +43,66 @@ configurations {
 }
 
 dependencies {
+    implementation project(appmodule.presentation)
+    implementation project(appmodule.domain)
+    implementation project(appmodule.infra)
+    implementation project(appmodule.core)
+
+    testImplementation dependency.test.junit
+    kapt dependency.test.ext
+    kapt dependency.test.espresso
+    androidTestImplementation dependency.test.core
+    androidTestImplementation dependency.test.ext
+
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
-    implementation "com.google.android.material:material:1.1.0"
-    testImplementation 'junit:junit:4.12'
-    kapt 'androidx.test.ext:junit:1.1.0'
-    kapt 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation dependency.androidx.appcompat
+    implementation dependency.androidx.core
+    implementation dependency.androidx.constraintlayout
+    implementation dependency.androidx.recyclerview
+    implementation dependency.androidx.swiperefreshlayout
+    implementation dependency.androidx.lifecycle.viewmodel
+    implementation dependency.androidx.lifecycle.common
 
-    // Android Architecture Components
-    def lifecycle_version = "2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version"
-    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycle_version"
+    implementation dependency.dagger.dagger
+    implementation dependency.dagger.android
+    implementation dependency.dagger.androidsupport
+    kapt dependency.dagger.compiler
+    kapt dependency.dagger.androidprocessor
 
-    // rx
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxkotlin:2.4.0'
+    implementation dependency.rxjava.rxjava
+    implementation dependency.rxjava.rxandroid
+    implementation dependency.rxjava.rxkotlin
 
-    // gson
-    implementation "com.google.code.gson:gson:2.8.6"
+    implementation dependency.room.runtime
+    implementation dependency.room.ktx
+    implementation dependency.room.rxjava2
+    implementation dependency.room.guava
+    kapt dependency.room.compiler
 
-    // ktlint
-    ktlint "com.pinterest:ktlint:0.36.0"
+    implementation dependency.retrofit.retrofit
+    implementation dependency.retrofit.gson
+    implementation dependency.retrofit.rxjava2
+    implementation dependency.retrofit.logging
 
-    // timber
-    implementation "com.jakewharton.timber:timber:4.7.1"
+    implementation dependency.markwon.core
+    implementation dependency.markwon.image
+    implementation dependency.markwon.tables
+    implementation dependency.markwon.tasklist
 
-    // dagger
-    def dagger_version = '2.26'
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation "com.google.dagger:dagger-android:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation dependency.material
 
-    // retrofit
-    def version_retrofit = '2.8.1'
-    implementation "com.squareup.retrofit2:retrofit:$version_retrofit"
-    implementation "com.squareup.retrofit2:converter-gson:$version_retrofit"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$version_retrofit"
-    implementation "com.squareup.okhttp3:logging-interceptor:4.4.0"
+    implementation dependency.gson
 
-    // room
-    def room_version = "2.2.3"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    implementation "androidx.room:room-rxjava2:$room_version"
-    implementation "androidx.room:room-guava:$room_version"
+    implementation dependency.timber
 
-    def markdwonVersion = "4.3.0"
-    implementation "io.noties.markwon:core:$markdwonVersion"
-    implementation "io.noties.markwon:image:$markdwonVersion"
-    implementation "io.noties.markwon:ext-tables:$markdwonVersion"
-    implementation "io.noties.markwon:ext-tasklist:$markdwonVersion"
-    implementation 'com.android.support:design:28.0.0'
+    ktlint dependency.ktlint
 }
 
 task ktlintFormat(type: JavaExec, group: "formatting") {
     description = "Fix Kotlin code style deviations."
     main = "com.pinterest.ktlint.Main"
     classpath = configurations.ktlint
-    args "-F",'src/**/*.kt', "--reporter=plain,output=${buildDir}/app/ktlint.txt"
+    args "-F", 'src/**/*.kt', "--reporter=plain,output=${buildDir}/app/ktlint.txt"
 }
 preBuild.dependsOn ktlintFormat

@@ -6,21 +6,21 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
-import hoge.hogehoge.myapplication.di.viewmodel.ViewModelKey
-import hoge.hogehoge.myapplication.presentation.article.ArticleActivity
-import hoge.hogehoge.myapplication.presentation.article.articlepager.ArticlePagerFragment
-import hoge.hogehoge.myapplication.presentation.article.articleremote.popular.ArticlePopularFragment
-import hoge.hogehoge.myapplication.presentation.article.articleremote.popular.ArticlePopularViewModel
-import hoge.hogehoge.myapplication.presentation.article.articleremote.timeline.ArticleTimelineFragment
-import hoge.hogehoge.myapplication.presentation.article.articleremote.timeline.ArticleTimelineViewModel
-import hoge.hogehoge.myapplication.presentation.article.articleremote.trend.ArticleTrendFragment
-import hoge.hogehoge.myapplication.presentation.article.articleremote.trend.ArticleTrendViewModel
-import hoge.hogehoge.myapplication.presentation.article.articleremoteviewer.ArticleRemoteViewerFragment
-import hoge.hogehoge.myapplication.presentation.article.articleremoteviewer.ArticleRemoteViewerViewModel
-import hoge.hogehoge.myapplication.presentation.article.articlesaved.ArticleSavedFragment
-import hoge.hogehoge.myapplication.presentation.article.articlesaved.ArticleSavedViewModel
-import hoge.hogehoge.myapplication.presentation.article.articlesavedviewer.ArticleSavedViewerFragment
-import hoge.hogehoge.myapplication.presentation.article.articlesavedviewer.ArticleSavedViewerViewModel
+import hoge.hogehoge.core.di.viewmodel.ViewModelKey
+import hoge.hogehoge.presentation.article.ArticleActivity
+import hoge.hogehoge.presentation.article.articlepager.ArticlePagerFragment
+import hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularFragment
+import hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularViewModel
+import hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineFragment
+import hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineViewModel
+import hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendFragment
+import hoge.hogehoge.presentation.article.articleremote.trend.ArticleTrendViewModel
+import hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerFragment
+import hoge.hogehoge.presentation.article.articleremoteviewer.ArticleRemoteViewerViewModel
+import hoge.hogehoge.presentation.article.articlesaved.ArticleSavedFragment
+import hoge.hogehoge.presentation.article.articlesaved.ArticleSavedViewModel
+import hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerFragment
+import hoge.hogehoge.presentation.article.articlesavedviewer.ArticleSavedViewerViewModel
 
 @Module
 interface ArticleActivityModule {

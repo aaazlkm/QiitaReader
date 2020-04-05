@@ -5,9 +5,9 @@ import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
-import hoge.hogehoge.myapplication.API_TIME_OUT_UNIT_SECONDS
-import hoge.hogehoge.myapplication.QIITA_BASE_URL
-import hoge.hogehoge.myapplication.infra.api.qiita.QiitaService
+import hoge.hogehoge.core.API_TIME_OUT_UNIT_SECONDS
+import hoge.hogehoge.core.QIITA_BASE_URL
+import hoge.hogehoge.infra.api.qiita.QiitaService
 import io.reactivex.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton

@@ -3,7 +3,7 @@ package hoge.hogehoge.myapplication.di
 import android.content.Context
 import dagger.Module
 import dagger.Provides
-import hoge.hogehoge.myapplication.infra.database.QiitaDatabase
+import hoge.hogehoge.infra.database.QiitaDatabase
 import javax.inject.Singleton
 
 @Module
