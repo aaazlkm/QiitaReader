@@ -9,5 +9,5 @@ interface ArticleActivityBuilder {
     @ContributesAndroidInjector(
         modules = [ArticleActivityModule::class]
     )
-    fun contributeCalendarActivity(): hoge.hogehoge.presentation.article.ArticleActivity
+    fun contributeCalendarActivity(): ArticleActivity
 }

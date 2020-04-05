@@ -8,41 +8,41 @@ import io.reactivex.Observable
 import io.reactivex.Single
 
 @CheckResult
-fun <T> Flowable<T>.toResult(): Flowable<hoge.hogehoge.domain.result.Result<T>> {
+fun <T> Flowable<T>.toResult(): Flowable<Result<T>> {
     return compose { item ->
         item
-            .map { hoge.hogehoge.domain.result.Result.success(it) }
-            .onErrorReturn { e -> hoge.hogehoge.domain.result.Result.failure(e) }
-            .startWith(hoge.hogehoge.domain.result.Result.loading())
+            .map { Result.success(it) }
+            .onErrorReturn { e -> Result.failure(e) }
+            .startWith(Result.loading())
     }
 }
 
 @CheckResult
-fun <T> Observable<T>.toResult(): Observable<hoge.hogehoge.domain.result.Result<T>> {
+fun <T> Observable<T>.toResult(): Observable<Result<T>> {
     return compose { item ->
         item
-            .map { hoge.hogehoge.domain.result.Result.success(it) }
-            .onErrorReturn { e -> hoge.hogehoge.domain.result.Result.failure(e) }
-            .startWith(hoge.hogehoge.domain.result.Result.loading())
+            .map { Result.success(it) }
+            .onErrorReturn { e -> Result.failure(e) }
+            .startWith(Result.loading())
     }
 }
 
 @CheckResult
-fun <T> Single<T>.toResult(): Observable<hoge.hogehoge.domain.result.Result<T>> {
+fun <T> Single<T>.toResult(): Observable<Result<T>> {
     return toObservable().toResult()
 }
 
 @CheckResult
-fun <T> Maybe<T>.toResult(): Observable<hoge.hogehoge.domain.result.Result<T>> {
+fun <T> Maybe<T>.toResult(): Observable<Result<T>> {
     return toSingle().toResult()
 }
 
 @CheckResult
-fun <T> Maybe<T>.toResult(defaultValue: T): Observable<hoge.hogehoge.domain.result.Result<T>> {
+fun <T> Maybe<T>.toResult(defaultValue: T): Observable<Result<T>> {
     return toSingle(defaultValue).toResult()
 }
 
 @CheckResult
-fun Completable.toResult(): Observable<hoge.hogehoge.domain.result.Result<Boolean>> {
+fun Completable.toResult(): Observable<Result<Boolean>> {
     return this.toSingleDefault(true).toResult()
 }
