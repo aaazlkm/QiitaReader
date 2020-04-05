@@ -1,4 +1,4 @@
-package hoge.hogehoge.myapplication.presentation.article.articleviewer
+package hoge.hogehoge.myapplication.presentation.article.articleremoteviewer
 
 import androidx.lifecycle.ViewModel
 import hoge.hogehoge.myapplication.domain.entity.Article
@@ -12,7 +12,7 @@ import io.reactivex.rxkotlin.Flowables
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
 
-class ArticleViewerViewModel @Inject constructor(
+class ArticleRemoteViewerViewModel @Inject constructor(
     private val qiitaUseCase: QiitaUseCase
 ) : ViewModel() {
     private val compositeDisposable = CompositeDisposable()

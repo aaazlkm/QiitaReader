@@ -76,10 +76,16 @@ class QiitaUseCaseImpl @Inject constructor(
 
     //region local
 
-    override fun fetchSavedArticles(): Observable<Result<List<Article.Local>>> {
+    override fun fetchSavedArticle(articleId: String): Observable<Result<Article.Saved>> {
+        return qiitaRepository.fetchSavedArticle(articleId)
+            .map { Article.Saved(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt)) }
+            .toResult()
+    }
+
+    override fun fetchSavedArticles(): Observable<Result<List<Article.Saved>>> {
         return qiitaRepository
             .fetchSavedArticles()
-            .map { articlesInDB -> articlesInDB.map { Article.Local(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt)) } }
+            .map { articlesInDB -> articlesInDB.map { Article.Saved(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt)) } }
             .toResult()
     }
 
@@ -97,7 +103,7 @@ class QiitaUseCaseImpl @Inject constructor(
         return qiitaRepository.upsertSavedArticles(*articlesInDB).toResult()
     }
 
-    override fun deleteSavedArticle(article: Article.Local): Observable<Result<Boolean>> {
+    override fun deleteSavedArticle(article: Article.Saved): Observable<Result<Boolean>> {
         val articleInDB = ArticleInDB(
             article.articleId,
             article.title,

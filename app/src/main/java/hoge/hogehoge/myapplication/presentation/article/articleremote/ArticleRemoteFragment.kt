@@ -85,7 +85,7 @@ abstract class ArticleRemoteFragment : BaseFragment() {
             adapter = ArticleRemoteAdapter(context, compositeDisposable).apply {
                 setOnItemClickListener(object : ArticleRemoteAdapter.OnItemClickListener {
                     override fun onItemClicked(article: Article) {
-                        navigationController.toArticleViewerFragment(article.articleId)
+                        navigationController.toArticleRemoteViewerFragment(article.articleId)
                     }
                 })
             }

@@ -72,8 +72,8 @@ class ArticleSavedFragment : BaseFragment() {
             layoutManager = LinearLayoutManager(this.context)
             adapter = ArticleSavedAdapter().apply {
                 setOnItemClickListener(object : ArticleSavedAdapter.OnItemClickListener {
-                    override fun onItemClicked(article: Article.Local) {
-                        navigationController.toArticleViewerFragment(article.articleId)
+                    override fun onItemClicked(article: Article.Saved) {
+                        navigationController.toArticleSavedViewerFragment(article.articleId)
                     }
                 })
             }

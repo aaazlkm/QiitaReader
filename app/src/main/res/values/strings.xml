@@ -25,12 +25,19 @@
     <string name="fragment_article_saved_number_of_articles">保存記事数: %d</string>
     <string name="fragment_article_saved_error_get_articles_message">記事の取得に失敗しました</string>
 
-    <!--  fragment article viewer -->
-    <string name="fragment_article_viewer_toast_save_article">保存しました</string>
-    <string name="fragment_article_viewer_dialog_confirm_saving_article_title">この記事を保存しますか？</string>
-    <string name="fragment_article_viewer_error_get_article_id">記事IDを取得できませんでした</string>
-    <string name="fragment_article_viewer_error_get_article">記事の取得に失敗しました</string>
-    <string name="fragment_article_viewer_error_save_article">記事の保存に失敗しました</string>
+    <!--  fragment article remote viewer -->
+    <string name="fragment_article_remote_viewer_toast_save_article">保存しました</string>
+    <string name="fragment_article_remote_viewer_dialog_confirm_saving_article_title">この記事を保存しますか？</string>
+    <string name="fragment_article_remote_viewer_error_get_article_id">記事IDを取得できませんでした</string>
+    <string name="fragment_article_remote_viewer_error_get_article">記事の取得に失敗しました</string>
+    <string name="fragment_article_remote_viewer_error_save_article">記事の保存に失敗しました</string>
+
+    <!--  fragment article saved viewer -->
+    <string name="fragment_article_remote_viewer_toast_delete_article">削除しました</string>
+    <string name="fragment_article_saved_viewer_dialog_confirm_deleting_article_title">この記事を削除しますか？</string>
+    <string name="fragment_article_saved_viewer_error_get_article_id">記事IDを取得できませんでした</string>
+    <string name="fragment_article_saved_viewer_error_get_article">記事の取得に失敗しました</string>
+    <string name="fragment_article_saved_viewer_error_delete_article">記事の削除に失敗しました</string>
 
     <!--  view retry  -->
     <string name="view_retry_button">再試行</string>

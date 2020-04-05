@@ -19,8 +19,8 @@ class ArticleSavedViewModel @Inject constructor(
 
     //region event
 
-    private val eventOfGettingArticlesProcessor = BehaviorProcessor.createDefault<Result<List<Article.Local>>>(Result.onReady())
-    val eventOfGettingArticles: Flowable<Result<List<Article.Local>>> = eventOfGettingArticlesProcessor.observeOn(AndroidSchedulers.mainThread())
+    private val eventOfGettingArticlesProcessor = BehaviorProcessor.createDefault<Result<List<Article.Saved>>>(Result.onReady())
+    val eventOfGettingArticles: Flowable<Result<List<Article.Saved>>> = eventOfGettingArticlesProcessor.observeOn(AndroidSchedulers.mainThread())
 
     //endregion
 
@@ -28,8 +28,8 @@ class ArticleSavedViewModel @Inject constructor(
 
     val isLoading: Flowable<Boolean> = eventOfGettingArticles.map { it is Result.Loading }.observeOn(AndroidSchedulers.mainThread())
 
-    private val articlesProcessor = PublishProcessor.create<List<Article.Local>>()
-    val articles: Flowable<List<Article.Local>> = articlesProcessor.observeOn(AndroidSchedulers.mainThread())
+    private val articlesProcessor = PublishProcessor.create<List<Article.Saved>>()
+    val articles: Flowable<List<Article.Saved>> = articlesProcessor.observeOn(AndroidSchedulers.mainThread())
 
     //endregion
 

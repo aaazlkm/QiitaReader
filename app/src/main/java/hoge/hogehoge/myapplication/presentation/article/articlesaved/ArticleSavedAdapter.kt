@@ -10,10 +10,10 @@ import hoge.hogehoge.myapplication.domain.entity.Article
 
 class ArticleSavedAdapter : RecyclerView.Adapter<ArticleSavedAdapter.ViewHolder>() {
     interface OnItemClickListener {
-        fun onItemClicked(article: Article.Local)
+        fun onItemClicked(article: Article.Saved)
     }
 
-    private val articles = mutableListOf<Article.Local>()
+    private val articles = mutableListOf<Article.Saved>()
 
     private var onItemClickListener: OnItemClickListener? = null
 
@@ -40,7 +40,7 @@ class ArticleSavedAdapter : RecyclerView.Adapter<ArticleSavedAdapter.ViewHolder>
 
     //endregion
 
-    fun insertArticles(articles: List<Article.Local>) {
+    fun insertArticles(articles: List<Article.Saved>) {
         this.articles.addAll(articles)
         notifyDataSetChanged()
     }

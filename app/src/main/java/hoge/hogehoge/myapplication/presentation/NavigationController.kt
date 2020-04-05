@@ -4,7 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import hoge.hogehoge.myapplication.R
 import hoge.hogehoge.myapplication.presentation.article.articlepager.ArticlePagerFragment
-import hoge.hogehoge.myapplication.presentation.article.articleviewer.ArticleViewerFragment
+import hoge.hogehoge.myapplication.presentation.article.articleremoteviewer.ArticleRemoteViewerFragment
+import hoge.hogehoge.myapplication.presentation.article.articlesavedviewer.ArticleSavedViewerFragment
 import javax.inject.Inject
 
 class NavigationController @Inject constructor(
@@ -13,12 +14,16 @@ class NavigationController @Inject constructor(
     private val containerId: Int = R.id.container
     private val fragmentManager = activity.supportFragmentManager
 
-    fun toArticleViewerFragment(articleId: String) {
-        replaceFragment(ArticleViewerFragment.newInstance(articleId))
-    }
-
     fun toArticlePagerFragment() {
         replaceFragment(ArticlePagerFragment.newInstance())
+    }
+
+    fun toArticleRemoteViewerFragment(articleId: String) {
+        replaceFragment(ArticleRemoteViewerFragment.newInstance(articleId))
+    }
+
+    fun toArticleSavedViewerFragment(articleId: String) {
+        replaceFragment(ArticleSavedViewerFragment.newInstance(articleId))
     }
 
     fun popFragment() {

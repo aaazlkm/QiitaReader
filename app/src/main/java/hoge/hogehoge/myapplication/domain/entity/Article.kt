@@ -19,7 +19,7 @@ sealed class Article {
         val user: User.Remote
     ) : Article()
 
-    data class Local(
+    data class Saved(
         override val articleId: String,
         override val title: String,
         override val bodyMarkDown: String,
