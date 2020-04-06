@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import hoge.hogehoge.core.di.viewmodel.ViewModelFactory
 import hoge.hogehoge.domain.entity.Article
 import hoge.hogehoge.domain.result.Result
@@ -14,10 +13,10 @@ import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.base.BaseFragment
 import hoge.hogehoge.presentation.databinding.FragmentArticleRemoteBinding
 import io.reactivex.rxkotlin.addTo
+import javax.inject.Inject
 import kotlinx.android.synthetic.main.view_retry.messageText
 import kotlinx.android.synthetic.main.view_retry.retryButton
 import timber.log.Timber
-import javax.inject.Inject
 
 abstract class ArticleRemoteFragment : BaseFragment() {
     private lateinit var binding: FragmentArticleRemoteBinding
@@ -56,8 +55,8 @@ abstract class ArticleRemoteFragment : BaseFragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         val lastScrollPosition = (binding.articleRecyclerView.layoutManager as? LinearLayoutManager)?.findFirstCompletelyVisibleItemPosition() ?: return
-        val articles = (binding.articleRecyclerView.adapter as? ArticleRemoteAdapter)?.articles ?: return
-        viewModel.saveState(lastScrollPosition, articles)
+        val articles = (binding.articleRecyclerView.adapter as? ArticleRemoteAdapter)?.getArticles() ?: return
+        viewModel.saveArticleCache(ArticleRemoteViewModel.ArticleCache(lastScrollPosition, articles))
     }
 
     //endregion
@@ -88,20 +87,12 @@ abstract class ArticleRemoteFragment : BaseFragment() {
                         navigationController.toArticleRemoteViewerFragment(article.articleId)
                     }
                 })
-            }
-
-            // 画面下にスクロールした時の処理
-            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                    super.onScrolled(recyclerView, dx, dy)
-                    val totalItemCount = recyclerView.adapter?.itemCount // 合計のアイテム数
-                    val firstPosition = (recyclerView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition() // RecyclerViewの一番上に表示されているアイテムのポジション
-                    val visibleChildCount = recyclerView.childCount // RecyclerViewに表示されてるアイテム数
-                    if (totalItemCount == firstPosition + visibleChildCount) {
-                        viewModel.fetchArticles()
+                setOnLoadMoreListener(object : ArticleRemoteAdapter.OnLoadMoreListener {
+                    override fun onLoadMore() {
+                        viewModel.fetchArticles(false)
                     }
-                }
-            })
+                })
+            }
         }
     }
 
@@ -126,7 +117,7 @@ abstract class ArticleRemoteFragment : BaseFragment() {
         viewModel.articles
             .subscribe {
                 (binding.articleRecyclerView.adapter as? ArticleRemoteAdapter)?.run {
-                    insertArticles(it.articles)
+                    insertArticlesAndResetProgress(it.articles)
                 }
                 when (it) {
                     is ArticleResult.Cache -> binding.articleRecyclerView.scrollToPosition(it.position)
@@ -150,7 +141,7 @@ abstract class ArticleRemoteFragment : BaseFragment() {
             messageText.text = message
             retryButton.setOnClickListener {
                 binding.retryView.root.visibility = View.GONE
-                viewModel.fetchArticlesOrCache()
+                viewModel.fetchArticles()
             }
         }
     }

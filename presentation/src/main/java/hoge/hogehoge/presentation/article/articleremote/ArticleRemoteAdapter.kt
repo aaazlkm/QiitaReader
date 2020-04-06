@@ -1,8 +1,8 @@
 package hoge.hogehoge.presentation.article.articleremote
 
 import android.content.Context
-import android.graphics.Bitmap
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -11,6 +11,7 @@ import hoge.hogehoge.core.utility.DownloadUtility
 import hoge.hogehoge.domain.entity.Article
 import hoge.hogehoge.presentation.R
 import hoge.hogehoge.presentation.databinding.ItemArticleBinding
+import hoge.hogehoge.presentation.databinding.ItemProgressBinding
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
@@ -26,98 +27,154 @@ class ArticleRemoteAdapter(
         fun onItemClicked(article: Article)
     }
 
-    val articles = mutableListOf<Article.Remote>()
+    interface OnLoadMoreListener {
+        fun onLoadMore()
+    }
 
-    private val urlToUserIconCache = mutableMapOf<String, Bitmap>()
-    private val urlToDisposable = mutableMapOf<String, Disposable>()
+    sealed class Item {
+        data class Article(val article: hoge.hogehoge.domain.entity.Article.Remote) : Item() {
+            companion object {
+                const val VIEW_TYPE = 0
+            }
+        }
+
+        object Progress : Item() {
+            const val VIEW_TYPE = 1
+        }
+    }
+
+    sealed class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        data class Article(val binding: ItemArticleBinding) : ViewHolder(binding.root)
+
+        data class Progress(val binding: ItemProgressBinding) : ViewHolder(binding.root)
+    }
+
+    private val items = mutableListOf<Item>()
+
+    private val articleToDisposable = hashMapOf<Article.Remote, Disposable>()
 
     private var onItemClickListener: OnItemClickListener? = null
-
-    class ViewHolder(val binding: ItemArticleBinding) : RecyclerView.ViewHolder(binding.root)
+    private var onLoadMoreListener: OnLoadMoreListener? = null
 
     //region RecyclerView.Adapter override methods
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val binding: ItemArticleBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_article, parent, false)
-        return ViewHolder(binding)
+        return when (viewType) {
+            Item.Article.VIEW_TYPE -> {
+                val articleBinding: ItemArticleBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_article, parent, false)
+                ViewHolder.Article(articleBinding)
+            }
+            Item.Progress.VIEW_TYPE -> {
+                val progressBinding: ItemProgressBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_progress, parent, false)
+                ViewHolder.Progress(progressBinding)
+            }
+            else -> throw IllegalArgumentException("illegal view type. please confirm view type: $viewType")
+        }
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val article = articles[position]
-        with(holder.binding) {
-            titleText.text = article.title
-            likeCountText.text = context.getString(R.string.fragment_article_remote_item_article_lgtm, article.likesCount)
-            userNameText.text = context.getString(R.string.fragment_article_remote_item_article_by, article.user.id)
-            createdAtText.text = context.getString(R.string.fragment_article_remote_item_article_at, article.createdAt.format("yyyy/MM/dd"))
-            container.setOnClickListener { onItemClickListener?.onItemClicked(article) }
+        when (holder) {
+            is ViewHolder.Article -> {
+                val item = items[position] as Item.Article
+                val article = item.article
+                with(holder.binding) {
+                    titleText.text = article.title
+                    likeCountText.text = context.getString(R.string.fragment_article_remote_item_article_lgtm, article.likesCount)
+                    userNameText.text = context.getString(R.string.fragment_article_remote_item_article_by, article.user.id)
+                    createdAtText.text = context.getString(R.string.fragment_article_remote_item_article_at, article.createdAt.format("yyyy/MM/dd"))
+                    container.setOnClickListener { onItemClickListener?.onItemClicked(article) }
+                }
+                loadUserIcon(holder, article)
+            }
+            is ViewHolder.Progress -> {
+                onLoadMoreListener?.onLoadMore()
+            }
         }
-        loadUserIcon(holder, article.user.profileImageUrl)
     }
 
     override fun getItemCount(): Int {
-        return articles.size
+        return items.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (items[position]) {
+            is Item.Article -> Item.Article.VIEW_TYPE
+            is Item.Progress -> Item.Progress.VIEW_TYPE
+        }
     }
 
     //endregion
 
-    fun insertArticles(articles: List<Article.Remote>) {
-        this.articles.addAll(articles)
-        notifyDataSetChanged()
+    fun insertArticlesAndResetProgress(articles: List<Article.Remote>) {
+        val prevItemSize = this.items.size
+
+        this.items.mapIndexed { index, item -> index to item }
+            .filter { it.second is Item.Progress }
+            .forEach {
+                val (position, item) = it
+                this.items.removeAt(position)
+                this.notifyItemRemoved(position)
+            }
+
+        if (articles.isNotEmpty()) {
+            this.items.addAll(articles.map { Item.Article(it) })
+            this.items.add(Item.Progress)
+            notifyItemRangeInserted(prevItemSize, this.items.size - prevItemSize)
+        }
+    }
+
+    fun getArticles(): List<Article.Remote> {
+        return items.mapNotNull { it as? Item.Article }.map { it.article }
     }
 
     fun clearArticles() {
-        articles.clear()
-        urlToUserIconCache.clear()
-        urlToDisposable.values.forEach { it.dispose() }
-        urlToDisposable.clear()
+        items.clear()
+        articleToDisposable.values.forEach { it.dispose() }
+        articleToDisposable.clear()
         notifyDataSetChanged()
     }
 
-    fun setOnItemClickListener(listener: OnItemClickListener) {
+    fun setOnItemClickListener(listener: OnItemClickListener?) {
         this.onItemClickListener = listener
     }
 
-    fun removeOnItemClickListener() {
-        this.onItemClickListener = null
+    fun setOnLoadMoreListener(listener: OnLoadMoreListener?) {
+        this.onLoadMoreListener = listener
     }
 
     //region load user icon
 
-    private fun loadUserIcon(holder: ViewHolder, userIconUrl: String) {
-        holder.binding.userIconView.tag = userIconUrl
+    private fun loadUserIcon(holder: ViewHolder.Article, article: Article.Remote) {
+        holder.binding.userIconView.tag = article
 
-        val userIconCache = urlToUserIconCache[userIconUrl]
-        if (userIconCache == null) {
-            loadUserIconFromUrl(holder, userIconUrl)
-        } else {
-            holder.binding.userIconView.setImageBitmap(userIconCache)
+        article.userIcon?.let {
+            holder.binding.userIconView.setImageBitmap(it)
+        } ?: run {
+            holder.binding.userIconView.setImageDrawable(context.getDrawable(R.drawable.background_loading))
+            loadUserIconFromUrl(holder, article)
         }
     }
 
-    private fun loadUserIconFromUrl(holder: ViewHolder, userIconUrl: String) {
-        holder.binding.userIconView.setImageDrawable(context.getDrawable(R.drawable.background_loading))
-
+    private fun loadUserIconFromUrl(holder: ViewHolder.Article, article: Article.Remote) {
         // 同じurlに対するリクエストが重複して走らないようにする
-        urlToDisposable[userIconUrl]?.dispose()
-        urlToDisposable.remove(userIconUrl)
+        articleToDisposable[article]?.dispose()
+        articleToDisposable.remove(article)
 
-        val disposable = DownloadUtility.loadBitmapFromUrl(userIconUrl)
+        DownloadUtility.loadBitmapFromUrl(article.user.profileImageUrl)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
-                onSuccess = {
-                    val (url, userIcon) = it
-                    urlToUserIconCache[url] = userIcon
-                    if (url == holder.binding.userIconView.tag) {
+                onSuccess = { userIcon ->
+                    article.userIcon = userIcon
+                    if (article == holder.binding.userIconView.tag) {
                         holder.binding.userIconView.setImageBitmap(userIcon)
                     }
                 },
                 onError = {
-                    Timber.d("failed to load image $it")
+                    Timber.e("failed to load image $it")
                 }
             )
             .addTo(compositeDisposable)
-
-        urlToDisposable[userIconUrl] = disposable
+            .let { articleToDisposable[article] = it }
     }
 
     //endregion

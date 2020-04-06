@@ -8,10 +8,6 @@ import javax.inject.Singleton
 
 @Module
 open class DatabaseModule {
-    companion object {
-        val instance = DatabaseModule()
-    }
-
     @Singleton
     @Provides
     fun provideQiitaDatabase(context: Context) = QiitaDatabase.create(context)

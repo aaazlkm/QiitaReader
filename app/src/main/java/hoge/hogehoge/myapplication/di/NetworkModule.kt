@@ -19,10 +19,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Module
 open class NetworkModule {
-    companion object {
-        val instance = NetworkModule()
-    }
-
     @Singleton
     @Provides
     fun provideQiitaService(@RetrofitQiita retrofit: Retrofit): QiitaService {

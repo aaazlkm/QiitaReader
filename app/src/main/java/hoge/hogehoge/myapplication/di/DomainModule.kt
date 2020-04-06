@@ -8,10 +8,6 @@ import hoge.hogehoge.infra.repository.QiitaRepository
 
 @Module
 open class DomainModule {
-    companion object {
-        val instance: DomainModule = DomainModule()
-    }
-
     @Provides
     fun provideQiitaUseCase(qiitaRepository: QiitaRepository): QiitaUseCase = QiitaUseCaseImpl(qiitaRepository)
 }
