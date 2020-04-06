@@ -1,0 +1,46 @@
+<resources>
+    <string name="app_name">QiitaApp</string>
+
+    <!--  common dialog  -->
+    <string name="common_dialog_ok">OK</string>
+    <string name="common_dialog_cancel">CANCEL</string>
+    <string name="common_dialog_cancel_jp">キャンセル</string>
+    <string name="common_dialog_select_jp">選択する</string>
+    <string name="common_dialog_retry_jp">再試行</string>
+
+    <!--  fragment article pager  -->
+    <string name="fragment_article_pager_title">ホーム</string>
+    <string name="fragment_article_pager_tab_trend">トレンド</string>
+    <string name="fragment_article_pager_tab_popular">人気の記事</string>
+    <string name="fragment_article_pager_tab_timeline">タイムライン</string>
+    <string name="fragment_article_pager_tab_saved">保存済み</string>
+
+    <!--  fragment article remote -->
+    <string name="fragment_article_remote_error_get_articles_message">記事の取得に失敗しました</string>
+    <string name="fragment_article_remote_item_article_lgtm">LGTM %d</string>
+    <string name="fragment_article_remote_item_article_by">by %s</string>
+    <string name="fragment_article_remote_item_article_at">at %s</string>
+
+    <!--  fragment article saved -->
+    <string name="fragment_article_saved_number_of_articles">保存記事数: %d</string>
+    <string name="fragment_article_saved_error_get_articles_message">記事の取得に失敗しました</string>
+
+    <!--  fragment article remote viewer -->
+    <string name="fragment_article_remote_viewer_toast_save_article">保存しました</string>
+    <string name="fragment_article_remote_viewer_dialog_confirm_saving_article_title">この記事を保存しますか？</string>
+    <string name="fragment_article_remote_viewer_error_get_article_id">記事IDを取得できませんでした</string>
+    <string name="fragment_article_remote_viewer_error_get_article">記事の取得に失敗しました</string>
+    <string name="fragment_article_remote_viewer_error_save_article">記事の保存に失敗しました</string>
+
+    <!--  fragment article saved viewer -->
+    <string name="fragment_article_remote_viewer_toast_delete_article">削除しました</string>
+    <string name="fragment_article_saved_viewer_dialog_confirm_deleting_article_title">この記事を削除しますか？</string>
+    <string name="fragment_article_saved_viewer_error_get_article_id">記事IDを取得できませんでした</string>
+    <string name="fragment_article_saved_viewer_error_get_article">記事の取得に失敗しました</string>
+    <string name="fragment_article_saved_viewer_error_delete_article">記事の削除に失敗しました</string>
+
+    <!--  view retry  -->
+    <string name="view_retry_button">再試行</string>
+    <string name="view_retry_message">データの取得に失敗しました</string>
+
+</resources>

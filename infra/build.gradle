@@ -1,0 +1,94 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+android {
+    compileSdkVersion constant.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion constant.minSdkVersion
+        targetSdkVersion constant.targetSdkVersion
+        versionCode constant.versionCode
+        versionName constant.versionName
+        testInstrumentationRunner constant.testInstrumentationRunner
+        consumerProguardFiles 'consumer-rules.pro'
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+repositories {
+    jcenter()
+}
+
+configurations {
+    ktlint
+}
+
+dependencies {
+    implementation project(appmodule.core)
+
+    testImplementation dependency.test.junit
+    kapt dependency.test.ext
+    kapt dependency.test.espresso
+    androidTestImplementation dependency.test.core
+    androidTestImplementation dependency.test.ext
+
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation dependency.androidx.appcompat
+    implementation dependency.androidx.core
+    implementation dependency.androidx.constraintlayout
+    implementation dependency.androidx.recyclerview
+    implementation dependency.androidx.swiperefreshlayout
+    implementation dependency.androidx.lifecycle.viewmodel
+    implementation dependency.androidx.lifecycle.common
+
+    implementation dependency.dagger.dagger
+    implementation dependency.dagger.android
+    implementation dependency.dagger.androidsupport
+    kapt dependency.dagger.compiler
+    kapt dependency.dagger.androidprocessor
+
+    implementation dependency.rxjava.rxjava
+    implementation dependency.rxjava.rxandroid
+    implementation dependency.rxjava.rxkotlin
+
+    implementation dependency.room.runtime
+    implementation dependency.room.ktx
+    implementation dependency.room.rxjava2
+    implementation dependency.room.guava
+    kapt dependency.room.compiler
+
+    implementation dependency.retrofit.retrofit
+    implementation dependency.retrofit.gson
+    implementation dependency.retrofit.rxjava2
+    implementation dependency.retrofit.logging
+
+    implementation dependency.markwon.core
+    implementation dependency.markwon.image
+    implementation dependency.markwon.tables
+    implementation dependency.markwon.tasklist
+
+    implementation dependency.material
+
+    implementation dependency.gson
+
+    implementation dependency.timber
+
+    ktlint dependency.ktlint
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "-F",'src/**/*.kt', "--reporter=plain,output=${buildDir}/app/ktlint.txt"
+}
+preBuild.dependsOn ktlintFormat

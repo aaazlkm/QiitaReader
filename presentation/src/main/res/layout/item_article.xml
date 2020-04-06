@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/item_article_background">
+
+
+        <ImageView
+            android:id="@+id/userIconView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/titleText"
+            app:layout_constraintVertical_bias="0.0"
+            tools:srcCompat="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:text="タイトルです"
+            android:textSize="@dimen/size_text_16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userIconView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/userNameText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:text="by aaa"
+            android:textColor="@color/common_text_sub"
+            android:textSize="@dimen/size_text_12sp"
+            app:layout_constraintBottom_toTopOf="@+id/createdAtText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userIconView"
+            app:layout_constraintTop_toBottomOf="@+id/likeCountText"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/createdAtText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginBottom="@dimen/margin_16dp"
+            android:text="at 2020/5/4"
+            android:textColor="@color/common_text_sub"
+            android:textSize="@dimen/size_text_12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userIconView"
+            app:layout_constraintTop_toBottomOf="@+id/userNameText"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/likeCountText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16dp"
+            android:layout_marginEnd="@dimen/margin_16dp"
+            android:text="LGTM 20"
+            android:textColor="@color/common_text_sub"
+            android:textSize="@dimen/size_text_12sp"
+            app:layout_constraintBottom_toTopOf="@+id/userNameText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/userIconView"
+            app:layout_constraintTop_toBottomOf="@+id/titleText"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <View
+            android:id="@+id/border"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/item_article_border"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
