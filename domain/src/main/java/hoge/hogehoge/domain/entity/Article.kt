@@ -27,6 +27,7 @@ sealed class Article {
         override val articleId: String,
         override val title: String,
         override val bodyMarkDown: String,
-        val savedAt: Date
+        val savedAt: Date,
+        var alreadyRead: Boolean
     ) : Article()
 }

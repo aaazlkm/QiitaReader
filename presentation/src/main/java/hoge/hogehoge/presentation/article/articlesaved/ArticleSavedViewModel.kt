@@ -47,7 +47,7 @@ class ArticleSavedViewModel @Inject constructor(
         if (eventOfGettingArticlesProcessor.value is Result.Loading) return
 
         qiitaUseCase.fetchSavedArticles()
-            .doOnNext { if (it is Result.Success) articlesProcessor.onNext(it.value) }
+            .doOnNext { if (it is Result.Success) articlesProcessor.onNext(it.value.sortedBy { it.savedAt.time }) }
             .subscribe { result -> eventOfGettingArticlesProcessor.onNext(result) }
             .addTo(compositeDisposable)
     }

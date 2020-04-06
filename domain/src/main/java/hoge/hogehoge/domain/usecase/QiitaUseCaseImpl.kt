@@ -78,25 +78,34 @@ class QiitaUseCaseImpl @Inject constructor(
 
     override fun fetchSavedArticle(articleId: String): Observable<Result<Article.Saved>> {
         return qiitaRepository.fetchSavedArticle(articleId)
-            .map { Article.Saved(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt)) }
+            .map { Article.Saved(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt), it.alreadyRead) }
             .toResult()
     }
 
     override fun fetchSavedArticles(): Observable<Result<List<Article.Saved>>> {
         return qiitaRepository
             .fetchSavedArticles()
-            .map { articlesInDB -> articlesInDB.map { Article.Saved(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt)) } }
+            .map { articlesInDB -> articlesInDB.map { Article.Saved(it.articleId, it.title, it.bodyMarkDown, Date(it.savedAt), it.alreadyRead) } }
             .toResult()
     }
 
     override fun upsertSavedArticles(vararg articles: Article): Observable<Result<Boolean>> {
         val articlesInDB =
             articles.map { article ->
+                val date = when (article) {
+                    is Article.Remote -> Date()
+                    is Article.Saved -> article.savedAt
+                }
+                val alreadyRead = when (article) {
+                    is Article.Remote -> false
+                    is Article.Saved -> article.alreadyRead
+                }
                 ArticleInDB(
                     article.articleId,
                     article.title,
                     article.bodyMarkDown,
-                    Date().time
+                    date.time,
+                    alreadyRead
                 )
             }.toTypedArray()
 
@@ -108,7 +117,8 @@ class QiitaUseCaseImpl @Inject constructor(
             article.articleId,
             article.title,
             article.bodyMarkDown,
-            article.savedAt.time
+            article.savedAt.time,
+            article.alreadyRead
         )
 
         return qiitaRepository.deleteSavedArticle(articleInDB).toResult()

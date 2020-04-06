@@ -1,6 +1,7 @@
 package hoge.hogehoge.presentation.article.articlesaved
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,7 @@ class ArticleSavedAdapter : RecyclerView.Adapter<ArticleSavedAdapter.ViewHolder>
         with(holder.binding) {
             titleText.text = article.title
             container.setOnClickListener { onItemClickListener?.onItemClicked(article) }
+            alreadyReadMark.visibility = if (article.alreadyRead) View.GONE else View.VISIBLE
         }
     }
 

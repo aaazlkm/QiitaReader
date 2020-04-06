@@ -9,7 +9,8 @@ data class ArticleInDB(
     @PrimaryKey @ColumnInfo(name = TABLE_COLUMN_ARTICLE_ID) val articleId: String,
     @ColumnInfo(name = TABLE_COLUMN_Title) val title: String,
     @ColumnInfo(name = TABLE_COLUMN_BODY_MARK_DOWN) val bodyMarkDown: String,
-    @ColumnInfo(name = TABLE_COLUMN_SAVED_AT) val savedAt: Long
+    @ColumnInfo(name = TABLE_COLUMN_SAVED_AT) val savedAt: Long,
+    @ColumnInfo(name = TABLE_COLUMN_ALREADY_READ) val alreadyRead: Boolean
 ) {
     companion object {
         const val TABLE_NAME = "table_article"
@@ -18,5 +19,6 @@ data class ArticleInDB(
         const val TABLE_COLUMN_Title = "title"
         const val TABLE_COLUMN_BODY_MARK_DOWN = "body_mark_down"
         const val TABLE_COLUMN_SAVED_AT = "saved_at"
+        const val TABLE_COLUMN_ALREADY_READ = "already_read"
     }
 }

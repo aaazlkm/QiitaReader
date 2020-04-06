@@ -9,6 +9,7 @@ import dagger.multibindings.IntoMap
 import hoge.hogehoge.core.di.viewmodel.ViewModelKey
 import hoge.hogehoge.presentation.article.ArticleActivity
 import hoge.hogehoge.presentation.article.articlepager.ArticlePagerFragment
+import hoge.hogehoge.presentation.article.articlepager.ArticlePagerViewModel
 import hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularFragment
 import hoge.hogehoge.presentation.article.articleremote.popular.ArticlePopularViewModel
 import hoge.hogehoge.presentation.article.articleremote.timeline.ArticleTimelineFragment
@@ -47,6 +48,13 @@ interface ArticleActivityModule {
 
     @ContributesAndroidInjector
     fun contributeArticleSavedFragment(): ArticleSavedFragment
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ArticlePagerViewModel::class)
+    fun bindsArticlePagerViewModel(
+        articlePagerViewModel: ArticlePagerViewModel
+    ): ViewModel
 
     @Binds
     @IntoMap

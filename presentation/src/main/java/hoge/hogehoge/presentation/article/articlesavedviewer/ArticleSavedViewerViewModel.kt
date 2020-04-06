@@ -10,6 +10,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.processors.BehaviorProcessor
 import io.reactivex.rxkotlin.addTo
 import javax.inject.Inject
+import timber.log.Timber
 
 class ArticleSavedViewerViewModel @Inject constructor(
     private val qiitaUseCase: QiitaUseCase
@@ -56,6 +57,18 @@ class ArticleSavedViewerViewModel @Inject constructor(
     fun deleteArticle(article: Article.Saved) {
         qiitaUseCase.deleteSavedArticle(article)
             .subscribe { eventOfDeletingArticleProcessor.onNext(it) }
+            .addTo(compositeDisposable)
+    }
+
+    fun checkAlreadyRead(article: Article.Saved) {
+        val newArticle = article.apply {
+            this.alreadyRead = true
+        }
+        qiitaUseCase.upsertSavedArticles(newArticle)
+            .subscribe {
+                // 画面に必要ないデータなので特にエラーの場合は無視する
+                Timber.d("result of upsertSavedArticles: $it")
+            }
             .addTo(compositeDisposable)
     }
 }
