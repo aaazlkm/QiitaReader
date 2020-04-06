@@ -13,10 +13,6 @@ import hoge.hogehoge.infra.store.QiitaRemoteStoreImpl
 
 @Module
 open class InfraModule {
-    companion object {
-        val instance: InfraModule = InfraModule()
-    }
-
     //region repository
 
     @Provides

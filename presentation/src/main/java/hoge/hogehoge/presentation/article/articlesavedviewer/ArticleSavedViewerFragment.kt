@@ -17,8 +17,8 @@ import hoge.hogehoge.presentation.base.BaseFragment
 import hoge.hogehoge.presentation.databinding.FragmentArticleSavedViewerBinding
 import io.noties.markwon.Markwon
 import io.reactivex.rxkotlin.addTo
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class ArticleSavedViewerFragment : BaseFragment() {
     companion object {

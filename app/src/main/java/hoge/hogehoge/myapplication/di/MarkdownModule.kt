@@ -11,10 +11,6 @@ import io.noties.markwon.image.ImagesPlugin
 
 @Module
 open class MarkdownModule {
-    companion object {
-        val instance = MarkdownModule()
-    }
-
     @Provides
     fun provideMarkdown(context: Context) = Markwon.builder(context)
         .usePlugin(CorePlugin.create())

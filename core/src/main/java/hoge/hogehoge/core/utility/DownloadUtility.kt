@@ -8,8 +8,8 @@ import java.net.HttpURLConnection
 import java.net.URL
 
 object DownloadUtility {
-    fun loadBitmapFromUrl(url: String, timeout: Int = 30 * 1000): Single<Pair<String, Bitmap>> {
-        return Single.create<Pair<String, Bitmap>> { emitter ->
+    fun loadBitmapFromUrl(url: String, timeout: Int = 30 * 1000): Single<Bitmap> {
+        return Single.create<Bitmap> { emitter ->
             runCatching {
                 val url = URL(url)
                 val connection = (url.openConnection() as HttpURLConnection).apply {
@@ -19,7 +19,7 @@ object DownloadUtility {
                 BitmapFactory.decodeStream(connection.inputStream)
             }.fold(
                 onSuccess = {
-                    emitter.onSuccess(url to it)
+                    emitter.onSuccess(it)
                 },
                 onFailure = {
                     emitter.onError(it)

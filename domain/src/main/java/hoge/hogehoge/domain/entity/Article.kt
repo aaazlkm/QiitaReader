@@ -1,5 +1,6 @@
 package hoge.hogehoge.domain.entity
 
+import android.graphics.Bitmap
 import java.util.Date
 
 sealed class Article {
@@ -17,7 +18,10 @@ sealed class Article {
         val tags: List<Tag.Remote>,
         val url: String,
         val user: User.Remote
-    ) : Article()
+    ) : Article() {
+        // 読み込んだIconを保持する
+        var userIcon: Bitmap? = null
+    }
 
     data class Saved(
         override val articleId: String,

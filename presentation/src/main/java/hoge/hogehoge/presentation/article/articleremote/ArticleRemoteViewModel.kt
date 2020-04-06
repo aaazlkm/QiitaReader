@@ -18,16 +18,19 @@ abstract class ArticleRemoteViewModel : ViewModel() {
         const val COUNT_ARTICLE_PER_PAGE = 15
     }
 
-    private val compositeDisposable = CompositeDisposable()
+    data class ArticleCache(
+        val lastScrollPosition: Int,
+        val articlesCache: List<Article.Remote>
+    )
 
-    //region articles cache
+    private val compositeDisposable = CompositeDisposable()
 
     /** 最後に読み込んだQiitaのページ */
     private var lastReadPage = INITIAL_LAST_READ_PAGE
 
-    private var lastScrollPosition: Int = 0
+    //region articles cache
 
-    private var articlesCache = mutableListOf<Article.Remote>()
+    private var articleCache: ArticleCache? = null
 
     //endregion
 
@@ -40,7 +43,8 @@ abstract class ArticleRemoteViewModel : ViewModel() {
 
     //region value
 
-    val isLoading: Flowable<Boolean> = eventOfGettingArticles.map { it is Result.Loading }.observeOn(AndroidSchedulers.mainThread())
+    private val isLoadingProcessor = BehaviorProcessor.createDefault<Boolean>(false)
+    val isLoading: Flowable<Boolean> = isLoadingProcessor.observeOn(AndroidSchedulers.mainThread())
 
     private val articlesProcessor = PublishProcessor.create<ArticleResult>()
     val articles: Flowable<ArticleResult> = articlesProcessor.observeOn(AndroidSchedulers.mainThread())
@@ -65,38 +69,43 @@ abstract class ArticleRemoteViewModel : ViewModel() {
 
     //endregion
 
-    fun fetchArticlesOrCache() {
+    fun fetchArticlesOrCache(needLoading: Boolean = true) {
         // ローディング中の場合、リクエストを無視する
         if (eventOfGettingArticlesProcessor.value is Result.Loading) return
 
-        if (articlesCache.isNotEmpty()) {
-            articlesProcessor.onNext(ArticleResult.Cache(lastScrollPosition, articlesCache))
-        } else {
-            fetchArticles()
+        articleCache?.let {
+            articlesProcessor.onNext(ArticleResult.Cache(it.lastScrollPosition, it.articlesCache))
+        } ?: run {
+            fetchArticles(needLoading)
         }
     }
 
-    fun fetchArticles() {
+    fun fetchArticles(needLoading: Boolean = true) {
         // ローディング中の場合、リクエストを無視する
         if (eventOfGettingArticlesProcessor.value is Result.Loading) return
 
         getArticleDataSource(lastReadPage, COUNT_ARTICLE_PER_PAGE)
-            .doOnNext { if (it is Result.Success) articlesProcessor.onNext(ArticleResult.New(it.value)) }
-            .subscribe { result -> eventOfGettingArticlesProcessor.onNext(result) }
+            .subscribe { result ->
+                eventOfGettingArticlesProcessor.onNext(result)
+                if (result is Result.Success) {
+                    articlesProcessor.onNext(ArticleResult.New(result.value))
+                    lastReadPage++
+                }
+                if (needLoading) isLoadingProcessor.onNext(result is Result.Loading)
+            }
             .addTo(compositeDisposable)
-
-        lastReadPage++
     }
 
-    fun saveState(lastScrollPosition: Int, articles: List<Article.Remote>) {
-        this.lastScrollPosition = lastScrollPosition
-        this.articlesCache.clear()
-        this.articlesCache.addAll(articles)
+    fun saveArticleCache(cache: ArticleCache) {
+        this.articleCache = cache
+    }
+
+    fun clearArticleCache() {
+        this.articleCache = null
     }
 
     fun resetState() {
-        this.lastReadPage = INITIAL_LAST_READ_PAGE
-        this.lastScrollPosition = 0
-        this.articlesCache.clear()
+        lastReadPage = INITIAL_LAST_READ_PAGE
+        clearArticleCache()
     }
 }
