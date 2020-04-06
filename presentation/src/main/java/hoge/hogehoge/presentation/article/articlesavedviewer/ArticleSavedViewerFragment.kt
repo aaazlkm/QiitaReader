@@ -130,6 +130,7 @@ class ArticleSavedViewerFragment : BaseFragment() {
         viewModel.article
             .subscribe {
                 binding.titleText.text = it.title
+                viewModel.checkAlreadyRead(it)
                 setMarkdownText(it.bodyMarkDown)
             }
             .addTo(compositeDisposable)

@@ -10,6 +10,19 @@
         android:layout_height="wrap_content"
         android:background="@color/item_article_background">
 
+        <View
+            android:id="@+id/alreadyReadMark"
+            android:layout_width="@dimen/size_view_12dp"
+            android:layout_height="@dimen/size_view_12dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/background_round"
+            android:backgroundTint="@color/color_accent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/titleText"
+            app:layout_constraintStart_toStartOf="@+id/titleText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
 
         <TextView
             android:id="@+id/titleText"
