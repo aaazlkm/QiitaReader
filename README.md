@@ -3,7 +3,7 @@
 以下に Apk が置いてあります、
 ぜひインストールして見てください！
 
-TODO url 置く
+https://github.com/aaazlkm/QiitaApp/blob/master/app/debug/app-debug.apk
 
 ## 概要
 
@@ -40,7 +40,7 @@ https://qiita.com/api/v2/docs#%E5%88%A9%E7%94%A8%E5%88%B6%E9%99%90
     - infra 層で生のデータを取得し
     - domain 層で生のデータをアプリ用に加工し
     - presentation 層で加工したデータを表示する
-  - それぞれの層の繋ぎ目を RxJava によって繋いでいる
+  - それぞれの層の繋ぎ目を RxJava によって実装している
 - presentation 層
   - 画面に関しての処理を行う層
   - MVVM アーキテクチャを採用しており基本的に一画面につき以下がペアになる
