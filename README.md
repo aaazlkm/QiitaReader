@@ -1,7 +1,6 @@
 # QiitaReader アプリ
 
 以下に Apk が置いてあります、
-ぜひインストールして見てください！
 
 https://github.com/aaazlkm/QiitaApp/blob/master/app/debug/app-debug.apk
 
