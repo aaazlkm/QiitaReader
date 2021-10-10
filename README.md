@@ -22,7 +22,7 @@ https://qiita.com/api/v2/docs#%E5%88%A9%E7%94%A8%E5%88%B6%E9%99%90
 ## 技術スタック
 
 - kotlin
-- MVVM + CleanArchitecture
+- MVVM + LayerdArchitecture
 - rxjava
 - dagger
 - retrofit
